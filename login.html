@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QuizOne — Login</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Plus Jakarta Sans", sans-serif;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(99,102,241,.16), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(14,165,233,.14), transparent 30%),
+                #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            color: #0f172a;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 1050px;
+            min-height: 650px;
+            background: rgba(255,255,255,.88);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(226,232,240,.8);
+            border-radius: 28px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            box-shadow: 0 25px 70px rgba(15,23,42,.12);
+        }
+
+        /* LEFT */
+
+        .left {
+            position: relative;
+            padding: 55px;
+            color: white;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(255,255,255,.16), transparent 25%),
+                linear-gradient(145deg, #4f46e5, #2563eb 55%, #0284c7);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .left::before {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.08);
+            right: -100px;
+            top: -80px;
+        }
+
+        .left::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.06);
+            left: -100px;
+            bottom: -70px;
+        }
+
+        .brand {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 15px;
+            background: rgba(255,255,255,.18);
+            border: 1px solid rgba(255,255,255,.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand-name {
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .hero {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 43px;
+            line-height: 1.12;
+            letter-spacing: -1.5px;
+            margin-bottom: 18px;
+        }
+
+        .hero p {
+            color: rgba(255,255,255,.82);
+            line-height: 1.7;
+            font-size: 15px;
+            max-width: 420px;
+        }
+
+        .features {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            gap: 13px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,.9);
+        }
+
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: rgba(255,255,255,.13);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* RIGHT */
+
+        .right {
+            padding: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-box {
+            width: 100%;
+            max-width: 430px;
+        }
+
+        .auth-header {
+            margin-bottom: 28px;
+        }
+
+        .auth-header h2 {
+            font-size: 28px;
+            letter-spacing: -.7px;
+            margin-bottom: 8px;
+        }
+
+        .auth-header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #f1f5f9;
+            padding: 5px;
+            border-radius: 13px;
+            margin-bottom: 26px;
+        }
+
+        .tab {
+            border: none;
+            background: transparent;
+            padding: 11px;
+            border-radius: 9px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            color: #64748b;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .tab.active {
+            background: white;
+            color: #2563eb;
+            box-shadow: 0 2px 8px rgba(15,23,42,.08);
+        }
+
+        .form {
+            display: none;
+        }
+
+        .form.active {
+            display: block;
+        }
+
+        .field {
+            margin-bottom: 17px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-wrap span {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 16px;
+        }
+
+        input {
+            width: 100%;
+            height: 49px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0 15px 0 42px;
+            outline: none;
+            font-family: inherit;
+            font-size: 14px;
+            color: #0f172a;
+            background: #fff;
+            transition: .2s;
+        }
+
+        input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99,102,241,.09);
+        }
+
+        .main-btn {
+            width: 100%;
+            height: 50px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4f46e5, #2563eb);
+            color: white;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: .2s;
+            box-shadow: 0 8px 20px rgba(37,99,235,.2);
+        }
+
+        .main-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 25px rgba(37,99,235,.27);
+        }
+
+        .main-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            display: none;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.error {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .message.success {
+            background: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        /* SIGNUP STEPS */
+
+        .steps {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 29px;
+            height: 29px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .step.active .step-circle {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .step.done .step-circle {
+            background: #16a34a;
+            color: white;
+        }
+
+        .step-line {
+            height: 2px;
+            background: #e2e8f0;
+            flex: 1;
+            margin: 0 8px;
+        }
+
+        .step.done + .step .step-line {
+            background: #16a34a;
+        }
+
+        .signup-step {
+            display: none;
+        }
+
+        .signup-step.active {
+            display: block;
+        }
+
+        .otp-box {
+            text-align: center;
+        }
+
+        .otp-box p {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        #otp {
+            text-align: center;
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: 8px;
+            padding-left: 20px;
+        }
+
+        .resend {
+            border: none;
+            background: transparent;
+            color: #2563eb;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 14px;
+        }
+
+        .resend:disabled {
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .back-btn {
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-family: inherit;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 14px;
+        }
+
+        .back-btn:hover {
+            color: #2563eb;
+        }
+
+        .password-note {
+            color: #64748b;
+            font-size: 11px;
+            margin-top: 6px;
+        }
+
+        @media (max-width: 850px) {
+            .wrapper {
+                grid-template-columns: 1fr;
+                max-width: 550px;
+            }
+
+            .left {
+                display: none;
+            }
+
+            .right {
+                padding: 38px 25px;
+            }
+        }
+
+        @media (max-width: 450px) {
+            body {
+                padding: 12px;
+            }
+
+            .wrapper {
+                border-radius: 20px;
+            }
+
+            .right {
+                padding: 30px 20px;
+            }
+
+            .auth-header h2 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- LEFT PANEL -->
+    <section class="left">
+
+        <div class="brand">
+            <div class="brand-logo">Q</div>
+            <div class="brand-name">QuizOne</div>
+        </div>
+
+        <div class="hero">
+            <h1>Prepare smarter.<br>Perform better.</h1>
+
+            <p>
+                Your AI-powered exam preparation platform for
+                focused practice, quizzes and performance tracking.
+            </p>
+        </div>
+
+        <div class="features">
+
+            <div class="feature">
+                <div class="feature-icon">✓</div>
+                <span>AI-powered quiz preparation</span>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">✓</div>
+                <span>Track your learning progress</span>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">✓</div>
+                <span>Practice according to your level</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- RIGHT PANEL -->
+    <section class="right">
+
+        <div class="auth-box">
+
+            <div class="auth-header">
+                <h2>Welcome to QuizOne</h2>
+                <p>Login to continue your preparation.</p>
+            </div>
+
+            <!-- TABS -->
+
+            <div class="tabs">
+                <button class="tab active" id="loginTab">
+                    Login
+                </button>
+
+                <button class="tab" id="signupTab">
+                    Create Account
+                </button>
+            </div>
+
+
+            <div id="message" class="message"></div>
+
+
+            <!-- LOGIN FORM -->
+
+            <form id="loginForm" class="form active">
+
+                <div class="field">
+
+                    <label>Email</label>
+
+                    <div class="input-wrap">
+                        <span>✉</span>
+
+                        <input
+                            type="email"
+                            id="loginEmail"
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>Password</label>
+
+                    <div class="input-wrap">
+                        <span>🔒</span>
+
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            placeholder="Enter your password"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="main-btn"
+                    id="loginBtn"
+                >
+                    Login
+                </button>
+
+            </form>
+
+
+            <!-- SIGNUP FORM -->
+
+            <form id="signupForm" class="form">
+
+                <!-- STEPS -->
+
+                <div class="steps">
+
+                    <div class="step active" id="stepIndicator1">
+                        <div class="step-circle">1</div>
+                        <div class="step-line"></div>
+                    </div>
+
+                    <div class="step" id="stepIndicator2">
+                        <div class="step-circle">2</div>
+                        <div class="step-line"></div>
+                    </div>
+
+                    <div class="step" id="stepIndicator3">
+                        <div class="step-circle">3</div>
+                    </div>
+
+                </div>
+
+
+                <!-- STEP 1 -->
+
+                <div
+                    class="signup-step active"
+                    id="signupStep1"
+                >
+
+                    <div class="field">
+
+                        <label>Full Name</label>
+
+                        <div class="input-wrap">
+                            <span>👤</span>
+
+                            <input
+                                type="text"
+                                id="signupName"
+                                placeholder="Enter your full name"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>Email</label>
+
+                        <div class="input-wrap">
+                            <span>✉</span>
+
+                            <input
+                                type="email"
+                                id="signupEmail"
+                                placeholder="Enter your email"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="main-btn"
+                        id="sendOtpBtn"
+                    >
+                        Continue & Send OTP
+                    </button>
+
+                </div>
+
+
+                <!-- STEP 2 -->
+
+                <div
+                    class="signup-step"
+                    id="signupStep2"
+                >
+
+                    <div class="otp-box">
+
+                        <p>
+                            We've sent a 6-digit verification code to
+                            <strong id="otpEmail"></strong>.
+                        </p>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>Verification Code</label>
+
+                        <div class="input-wrap">
+
+                            <input
+                                type="text"
+                                id="otp"
+                                inputmode="numeric"
+                                maxlength="6"
+                                placeholder="000000"
+                                autocomplete="one-time-code"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="main-btn"
+                        id="verifyOtpBtn"
+                    >
+                        Verify OTP
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="resend"
+                        id="resendOtpBtn"
+                    >
+                        Resend OTP
+                    </button>
+
+
+                    <br>
+
+                    <button
+                        type="button"
+                        class="back-btn"
+                        id="backToStep1"
+                    >
+                        ← Change name/email
+                    </button>
+
+                </div>
+
+
+                <!-- STEP 3 -->
+
+                <div
+                    class="signup-step"
+                    id="signupStep3"
+                >
+
+                    <div class="field">
+
+                        <label>Create Password</label>
+
+                        <div class="input-wrap">
+
+                            <span>🔒</span>
+
+                            <input
+                                type="password"
+                                id="signupPassword"
+                                placeholder="Create a password"
+                                minlength="6"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="password-note">
+                            Password must contain at least 6 characters.
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>Confirm Password</label>
+
+                        <div class="input-wrap">
+
+                            <span>🔐</span>
+
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                placeholder="Confirm your password"
+                                minlength="6"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="main-btn"
+                        id="createAccountBtn"
+                    >
+                        Create Account
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="back-btn"
+                        id="backToStep2"
+                    >
+                        ← Back to OTP
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+
+<script>
+
+    const loginTab = document.getElementById("loginTab");
+    const signupTab = document.getElementById("signupTab");
+
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+
+    const message = document.getElementById("message");
+
+
+    /* -------------------------
+       MESSAGE
+    ------------------------- */
+
+    function showMessage(text, type = "error") {
+
+        message.textContent = text;
+        message.className = "message show " + type;
+
+    }
+
+
+    function clearMessage() {
+
+        message.textContent = "";
+        message.className = "message";
+
+    }
+
+
+    /* -------------------------
+       TABS
+    ------------------------- */
+
+    loginTab.addEventListener("click", () => {
+
+        loginTab.classList.add("active");
+        signupTab.classList.remove("active");
+
+        loginForm.classList.add("active");
+        signupForm.classList.remove("active");
+
+        clearMessage();
+
+    });
+
+
+    signupTab.addEventListener("click", () => {
+
+        signupTab.classList.add("active");
+        loginTab.classList.remove("active");
+
+        signupForm.classList.add("active");
+        loginForm.classList.remove("active");
+
+        clearMessage();
+
+    });
+
+
+    /* -------------------------
+       CHECK EXISTING SESSION
+    ------------------------- */
+
+    async function checkExistingSession() {
+
+        const user = await getCurrentUser();
+
+        if (user) {
+            window.location.href = "profile.html";
+        }
+
+    }
+
+    checkExistingSession();
+
+
+    /* -------------------------
+       LOGIN
+    ------------------------- */
+
+    loginForm.addEventListener("submit", async (e) => {
+
+        e.preventDefault();
+
+        clearMessage();
+
+        const email =
+            document.getElementById("loginEmail").value.trim();
+
+        const password =
+            document.getElementById("loginPassword").value;
+
+
+        const btn = document.getElementById("loginBtn");
+
+        btn.disabled = true;
+        btn.textContent = "Logging in...";
+
+
+        const { error } = await loginUser(
+            email,
+            password
+        );
+
+
+        if (error) {
+
+            showMessage(error.message, "error");
+
+            btn.disabled = false;
+            btn.textContent = "Login";
+
+            return;
+
+        }
+
+
+        showMessage(
+            "Login successful. Redirecting...",
+            "success"
+        );
+
+
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 700);
+
+    });
+
+
+    /* -------------------------
+       SIGNUP VARIABLES
+    ------------------------- */
+
+    let signupEmail = "";
+    let signupName = "";
+
+    let resendTimer = null;
+    let resendSeconds = 0;
+
+
+    /* -------------------------
+       SHOW SIGNUP STEP
+    ------------------------- */
+
+    function showSignupStep(step) {
+
+        document.querySelectorAll(".signup-step")
+            .forEach(el => el.classList.remove("active"));
+
+        document.getElementById(
+            "signupStep" + step
+        ).classList.add("active");
+
+
+        document.querySelectorAll(".step")
+            .forEach(el => {
+                el.classList.remove("active");
+            });
+
+
+        for (let i = 1; i <= 3; i++) {
+
+            const indicator =
+                document.getElementById(
+                    "stepIndicator" + i
+                );
+
+            indicator.classList.remove("active");
+            indicator.classList.remove("done");
+
+
+            if (i < step) {
+                indicator.classList.add("done");
+            }
+
+            if (i === step) {
+                indicator.classList.add("active");
+            }
+
+        }
+
+    }
+
+
+    /* -------------------------
+       SEND OTP
+    ------------------------- */
+
+    document
+        .getElementById("sendOtpBtn")
+        .addEventListener("click", async () => {
+
+            clearMessage();
+
+            const name =
+                document
+                    .getElementById("signupName")
+                    .value
+                    .trim();
+
+            const email =
+                document
+                    .getElementById("signupEmail")
+                    .value
+                    .trim();
+
+
+            if (!name) {
+
+                showMessage(
+                    "Please enter your full name.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (!email) {
+
+                showMessage(
+                    "Please enter your email.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            signupName = name;
+            signupEmail = email;
+
+
+            const btn =
+                document.getElementById("sendOtpBtn");
+
+
+            btn.disabled = true;
+            btn.textContent = "Sending OTP...";
+
+
+            const { error } =
+                await sendSignupOtp(
+                    signupEmail,
+                    signupName
+                );
+
+
+            if (error) {
+
+                showMessage(
+                    error.message,
+                    "error"
+                );
+
+                btn.disabled = false;
+                btn.textContent = "Continue & Send OTP";
+
+                return;
+
+            }
+
+
+            document.getElementById("otpEmail")
+                .textContent = signupEmail;
+
+
+            showSignupStep(2);
+
+            showMessage(
+                "OTP sent successfully. Check your email.",
+                "success"
+            );
+
+
+            startResendTimer();
+
+            btn.disabled = false;
+            btn.textContent = "Continue & Send OTP";
+
+        });
+
+
+    /* -------------------------
+       VERIFY OTP
+    ------------------------- */
+
+    document
+        .getElementById("verifyOtpBtn")
+        .addEventListener("click", async () => {
+
+            clearMessage();
+
+            const otp =
+                document
+                    .getElementById("otp")
+                    .value
+                    .trim();
+
+
+            if (!/^\d{6}$/.test(otp)) {
+
+                showMessage(
+                    "Please enter the 6-digit OTP.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            const btn =
+                document.getElementById("verifyOtpBtn");
+
+
+            btn.disabled = true;
+            btn.textContent = "Verifying...";
+
+
+            const { error } =
+                await verifySignupOtp(
+                    signupEmail,
+                    otp
+                );
+
+
+            if (error) {
+
+                showMessage(
+                    "Invalid or expired OTP. Please try again.",
+                    "error"
+                );
+
+                btn.disabled = false;
+                btn.textContent = "Verify OTP";
+
+                return;
+
+            }
+
+
+            showSignupStep(3);
+
+            showMessage(
+                "Email verified. Now create your password.",
+                "success"
+            );
+
+
+            btn.disabled = false;
+            btn.textContent = "Verify OTP";
+
+        });
+
+
+    /* -------------------------
+       CREATE PASSWORD
+    ------------------------- */
+
+    document
+        .getElementById("createAccountBtn")
+        .addEventListener("click", async () => {
+
+            clearMessage();
+
+
+            const password =
+                document
+                    .getElementById("signupPassword")
+                    .value;
+
+            const confirmPassword =
+                document
+                    .getElementById("confirmPassword")
+                    .value;
+
+
+            if (password.length < 6) {
+
+                showMessage(
+                    "Password must contain at least 6 characters.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (password !== confirmPassword) {
+
+                showMessage(
+                    "Passwords do not match.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            const btn =
+                document.getElementById("createAccountBtn");
+
+
+            btn.disabled = true;
+            btn.textContent = "Creating Account...";
+
+
+            const { error } =
+                await createUserPassword(
+                    password,
+                    signupName
+                );
+
+
+            if (error) {
+
+                showMessage(
+                    error.message,
+                    "error"
+                );
+
+                btn.disabled = false;
+                btn.textContent = "Create Account";
+
+                return;
+
+            }
+
+
+            showMessage(
+                "Account created successfully! Redirecting...",
+                "success"
+            );
+
+
+            setTimeout(() => {
+                window.location.href = "profile.html";
+            }, 1000);
+
+        });
+
+
+    /* -------------------------
+       BACK BUTTONS
+    ------------------------- */
+
+    document
+        .getElementById("backToStep1")
+        .addEventListener("click", () => {
+
+            clearMessage();
+            showSignupStep(1);
+
+        });
+
+
+    document
+        .getElementById("backToStep2")
+        .addEventListener("click", () => {
+
+            clearMessage();
+            showSignupStep(2);
+
+        });
+
+
+    /* -------------------------
+       RESEND OTP
+    ------------------------- */
+
+    document
+        .getElementById("resendOtpBtn")
+        .addEventListener("click", async () => {
+
+            if (resendSeconds > 0) {
+                return;
+            }
+
+
+            clearMessage();
+
+
+            const btn =
+                document.getElementById("resendOtpBtn");
+
+
+            btn.disabled = true;
+            btn.textContent = "Sending...";
+
+
+            const { error } =
+                await sendSignupOtp(
+                    signupEmail,
+                    signupName
+                );
+
+
+            if (error) {
+
+                showMessage(
+                    error.message,
+                    "error"
+                );
+
+                btn.disabled = false;
+                btn.textContent = "Resend OTP";
+
+                return;
+
+            }
+
+
+            showMessage(
+                "A new OTP has been sent.",
+                "success"
+            );
+
+
+            startResendTimer();
+
+        });
+
+
+    /* -------------------------
+       RESEND TIMER
+    ------------------------- */
+
+    function startResendTimer() {
+
+        clearInterval(resendTimer);
+
+        resendSeconds = 60;
+
+        const btn =
+            document.getElementById("resendOtpBtn");
+
+
+        btn.disabled = true;
+
+
+        resendTimer = setInterval(() => {
+
+            resendSeconds--;
+
+            btn.textContent =
+                `Resend OTP in ${resendSeconds}s`;
+
+
+            if (resendSeconds <= 0) {
+
+                clearInterval(resendTimer);
+
+                btn.disabled = false;
+
+                btn.textContent = "Resend OTP";
+
+            }
+
+        }, 1000);
+
+    }
+
+
+    /* -------------------------
+       ONLY NUMBERS IN OTP
+    ------------------------- */
+
+    document
+        .getElementById("otp")
+        .addEventListener("input", function () {
+
+            this.value =
+                this.value
+                    .replace(/\D/g, "")
+                    .slice(0, 6);
+
+        });
+
+
+    /* -------------------------
+       URL MODE
+       login.html?mode=signup
+    ------------------------- */
+
+    const params =
+        new URLSearchParams(window.location.search);
+
+
+    if (params.get("mode") === "signup") {
+        signupTab.click();
+    }
+
+</script>
+
+</body>
+</html>

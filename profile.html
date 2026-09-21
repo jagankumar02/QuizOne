@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QuizOne — Profile Setup</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(99, 102, 241, 0.12),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 90% 90%,
+                    rgba(14, 165, 233, 0.10),
+                    transparent 30%
+                ),
+                #f8fafc;
+            color: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 18px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1050px;
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid #e2e8f0;
+            border-radius: 28px;
+            box-shadow: 0 25px 70px rgba(15, 23, 42, 0.10);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+        }
+
+        /* LEFT */
+
+        .left {
+            padding: 50px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(
+                    circle at 80% 15%,
+                    rgba(255,255,255,.16),
+                    transparent 25%
+                ),
+                linear-gradient(
+                    145deg,
+                    #4f46e5,
+                    #2563eb 55%,
+                    #0284c7
+                );
+        }
+
+        .left::before {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.06);
+            right: -130px;
+            bottom: -120px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: rgba(255,255,255,.16);
+            border: 1px solid rgba(255,255,255,.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand-name {
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .left-content {
+            position: relative;
+            z-index: 2;
+            margin-top: 100px;
+        }
+
+        .left-content h1 {
+            font-size: 38px;
+            line-height: 1.15;
+            letter-spacing: -1.2px;
+            margin-bottom: 18px;
+        }
+
+        .left-content p {
+            color: rgba(255,255,255,.82);
+            line-height: 1.7;
+            font-size: 14px;
+            max-width: 370px;
+        }
+
+        .benefits {
+            margin-top: 38px;
+            display: grid;
+            gap: 14px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .benefit {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: rgba(255,255,255,.9);
+        }
+
+        .benefit-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: rgba(255,255,255,.13);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* RIGHT */
+
+        .right {
+            padding: 48px;
+        }
+
+        .header {
+            margin-bottom: 28px;
+        }
+
+        .header h2 {
+            font-size: 28px;
+            letter-spacing: -0.8px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* PROGRESS */
+
+        .progress-area {
+            margin-bottom: 30px;
+        }
+
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 9px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 7px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                #4f46e5,
+                #2563eb
+            );
+            border-radius: 20px;
+            transition: width .3s ease;
+        }
+
+        /* FORM */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .field {
+            margin-bottom: 2px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 15px;
+            color: #94a3b8;
+        }
+
+        input,
+        select {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            outline: none;
+            background: white;
+            padding: 0 14px 0 40px;
+            font-family: inherit;
+            font-size: 13px;
+            color: #0f172a;
+            transition: .2s;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #6366f1;
+            box-shadow:
+                0 0 0 4px rgba(99,102,241,.09);
+        }
+
+        input:disabled {
+            background: #f8fafc;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        .email-note {
+            margin-top: 6px;
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        /* MESSAGE */
+
+        .message {
+            display: none;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.error {
+            color: #b91c1c;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+        }
+
+        .message.success {
+            color: #15803d;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+        }
+
+        /* BUTTON */
+
+        .save-btn {
+            width: 100%;
+            height: 51px;
+            margin-top: 27px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(
+                135deg,
+                #4f46e5,
+                #2563eb
+            );
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow:
+                0 10px 24px rgba(37,99,235,.20);
+            transition: .2s;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .save-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .logout {
+            display: block;
+            margin: 17px auto 0;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-family: inherit;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .logout:hover {
+            color: #dc2626;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 850px) {
+
+            .container {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+
+            .left {
+                display: none;
+            }
+
+            .right {
+                padding: 38px 28px;
+            }
+
+        }
+
+        @media (max-width: 520px) {
+
+            body {
+                padding: 12px;
+            }
+
+            .container {
+                border-radius: 20px;
+            }
+
+            .right {
+                padding: 28px 20px;
+            }
+
+            .header h2 {
+                font-size: 24px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LEFT -->
+
+    <section class="left">
+
+        <div class="brand">
+
+            <div class="logo">
+                Q
+            </div>
+
+            <div class="brand-name">
+                QuizOne
+            </div>
+
+        </div>
+
+
+        <div class="left-content">
+
+            <h1>
+                Let's set up<br>
+                your profile.
+            </h1>
+
+            <p>
+                Tell us a little about yourself so QuizOne
+                can personalize your learning experience.
+            </p>
+
+
+            <div class="benefits">
+
+                <div class="benefit">
+                    <div class="benefit-icon">✓</div>
+                    <span>Personalized quiz experience</span>
+                </div>
+
+                <div class="benefit">
+                    <div class="benefit-icon">✓</div>
+                    <span>Track your learning progress</span>
+                </div>
+
+                <div class="benefit">
+                    <div class="benefit-icon">✓</div>
+                    <span>Better subject-wise analytics</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- RIGHT -->
+
+    <section class="right">
+
+        <div class="profile-box">
+
+            <div class="header">
+
+                <h2>
+                    Complete your profile
+                </h2>
+
+                <p>
+                    This information will help us personalize
+                    your QuizOne experience.
+                </p>
+
+            </div>
+
+
+            <!-- PROGRESS -->
+
+            <div class="progress-area">
+
+                <div class="progress-top">
+
+                    <span>
+                        Profile completion
+                    </span>
+
+                    <span id="progressText">
+                        0%
+                    </span>
+
+                </div>
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill"
+                        id="progressFill"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+
+            <!-- FORM -->
+
+            <form id="profileForm">
+
+                <div class="form-grid">
+
+
+                    <!-- NAME -->
+
+                    <div class="field">
+
+                        <label>
+                            Full Name
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                👤
+                            </span>
+
+                            <input
+                                type="text"
+                                id="fullName"
+                                placeholder="Your full name"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="field">
+
+                        <label>
+                            Email
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                ✉
+                            </span>
+
+                            <input
+                                type="email"
+                                id="email"
+                                disabled
+                            >
+
+                        </div>
+
+                        <div class="email-note">
+                            Email is linked to your QuizOne account.
+                        </div>
+
+                    </div>
+
+
+                    <!-- COLLEGE -->
+
+                    <div class="field full">
+
+                        <label>
+                            College / Institution
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                🎓
+                            </span>
+
+                            <input
+                                type="text"
+                                id="college"
+                                placeholder="Enter your college or institution"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- COURSE -->
+
+                    <div class="field">
+
+                        <label>
+                            Course
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                📚
+                            </span>
+
+                            <select id="course" required>
+
+                                <option value="">
+                                    Select course
+                                </option>
+
+                                <option value="BTech">
+                                    B.Tech
+                                </option>
+
+                                <option value="BE">
+                                    B.E.
+                                </option>
+
+                                <option value="BCA">
+                                    BCA
+                                </option>
+
+                                <option value="BSc">
+                                    B.Sc
+                                </option>
+
+                                <option value="BBA">
+                                    BBA
+                                </option>
+
+                                <option value="BA">
+                                    B.A.
+                                </option>
+
+                                <option value="BCom">
+                                    B.Com
+                                </option>
+
+                                <option value="MTech">
+                                    M.Tech
+                                </option>
+
+                                <option value="MCA">
+                                    MCA
+                                </option>
+
+                                <option value="MSc">
+                                    M.Sc
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- YEAR -->
+
+                    <div class="field">
+
+                        <label>
+                            Year
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                📅
+                            </span>
+
+                            <select id="year" required>
+
+                                <option value="">
+                                    Select year
+                                </option>
+
+                                <option value="1">
+                                    1st Year
+                                </option>
+
+                                <option value="2">
+                                    2nd Year
+                                </option>
+
+                                <option value="3">
+                                    3rd Year
+                                </option>
+
+                                <option value="4">
+                                    4th Year
+                                </option>
+
+                                <option value="5">
+                                    5th Year
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DEPARTMENT -->
+
+                    <div class="field full">
+
+                        <label>
+                            Department
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                💻
+                            </span>
+
+                            <input
+                                type="text"
+                                id="department"
+                                placeholder="e.g. Computer Science & Engineering"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                    id="saveBtn"
+                >
+                    Save & Continue
+                </button>
+
+            </form>
+
+
+            <button
+                class="logout"
+                id="logoutBtn"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+
+<script>
+
+    let currentUser = null;
+
+
+    /* ==========================
+       ELEMENTS
+    ========================== */
+
+    const profileForm =
+        document.getElementById("profileForm");
+
+    const fullName =
+        document.getElementById("fullName");
+
+    const email =
+        document.getElementById("email");
+
+    const college =
+        document.getElementById("college");
+
+    const course =
+        document.getElementById("course");
+
+    const year =
+        document.getElementById("year");
+
+    const department =
+        document.getElementById("department");
+
+    const message =
+        document.getElementById("message");
+
+    const progressFill =
+        document.getElementById("progressFill");
+
+    const progressText =
+        document.getElementById("progressText");
+
+    const saveBtn =
+        document.getElementById("saveBtn");
+
+
+    /* ==========================
+       MESSAGE
+    ========================== */
+
+    function showMessage(text, type) {
+
+        message.textContent = text;
+
+        message.className =
+            "message show " + type;
+
+    }
+
+
+    function clearMessage() {
+
+        message.textContent = "";
+
+        message.className =
+            "message";
+
+    }
+
+
+    /* ==========================
+       LOAD USER
+    ========================== */
+
+    async function loadProfile() {
+
+        const user =
+            await getCurrentUser();
+
+
+        if (!user) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        currentUser = user;
+
+
+        email.value =
+            user.email || "";
+
+
+        /*
+         * Get existing profile data
+         * from Supabase Auth metadata
+         */
+
+        const metadata =
+            user.user_metadata || {};
+
+
+        fullName.value =
+            metadata.full_name || "";
+
+
+        college.value =
+            metadata.college || "";
+
+
+        course.value =
+            metadata.course || "";
+
+
+        year.value =
+            metadata.year || "";
+
+
+        department.value =
+            metadata.department || "";
+
+
+        updateProgress();
+
+    }
+
+
+    /* ==========================
+       PROFILE PROGRESS
+    ========================== */
+
+    function updateProgress() {
+
+        const fields = [
+            fullName.value.trim(),
+            college.value.trim(),
+            course.value,
+            year.value,
+            department.value.trim()
+        ];
+
+
+        const completed =
+            fields.filter(value => value !== "").length;
+
+
+        const percentage =
+            Math.round(
+                (completed / fields.length) * 100
+            );
+
+
+        progressFill.style.width =
+            percentage + "%";
+
+
+        progressText.textContent =
+            percentage + "%";
+
+    }
+
+
+    /* ==========================
+       LIVE PROGRESS
+    ========================== */
+
+    [
+        fullName,
+        college,
+        course,
+        year,
+        department
+    ].forEach(field => {
+
+        field.addEventListener(
+            "input",
+            updateProgress
+        );
+
+        field.addEventListener(
+            "change",
+            updateProgress
+        );
+
+    });
+
+
+    /* ==========================
+       SAVE PROFILE
+    ========================== */
+
+    profileForm.addEventListener(
+        "submit",
+        async (event) => {
+
+            event.preventDefault();
+
+            clearMessage();
+
+
+            if (!currentUser) {
+
+                showMessage(
+                    "User session not found. Please login again.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            const profileData = {
+
+                full_name:
+                    fullName.value.trim(),
+
+                college:
+                    college.value.trim(),
+
+                course:
+                    course.value,
+
+                year:
+                    year.value,
+
+                department:
+                    department.value.trim()
+
+            };
+
+
+            if (
+                !profileData.full_name ||
+                !profileData.college ||
+                !profileData.course ||
+                !profileData.year ||
+                !profileData.department
+            ) {
+
+                showMessage(
+                    "Please complete all profile fields.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            saveBtn.disabled = true;
+
+            saveBtn.textContent =
+                "Saving Profile...";
+
+
+            /*
+             * Save profile data in
+             * Supabase Auth user metadata
+             */
+
+            const { error } =
+                await supabaseClient.auth.updateUser({
+
+                    data: profileData
+
+                });
+
+
+            if (error) {
+
+                showMessage(
+                    error.message,
+                    "error"
+                );
+
+                saveBtn.disabled = false;
+
+                saveBtn.textContent =
+                    "Save & Continue";
+
+                return;
+
+            }
+
+
+            updateProgress();
+
+
+            showMessage(
+                "Profile saved successfully!",
+                "success"
+            );
+
+
+            setTimeout(() => {
+
+                window.location.href =
+                    "dashboard.html";
+
+            }, 900);
+
+        }
+    );
+
+
+    /* ==========================
+       LOGOUT
+    ========================== */
+
+    document
+        .getElementById("logoutBtn")
+        .addEventListener(
+            "click",
+            async () => {
+
+                await logoutUser();
+
+                window.location.href =
+                    "login.html";
+
+            }
+        );
+
+
+    /* ==========================
+       START
+    ========================== */
+
+    loadProfile();
+
+</script>
+
+</body>
+</html>

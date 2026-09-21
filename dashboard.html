@@ -1,0 +1,5064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QuizOne</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #635bff;
+            --primary-dark: #5147e8;
+            --primary-light: #eeecff;
+
+            --bg: #f7f8fc;
+            --card: #ffffff;
+
+            --text: #171827;
+            --muted: #73758a;
+            --border: #e9e9f1;
+
+            --success: #16a34a;
+            --danger: #ef4444;
+
+            --sidebar-width: 250px;
+        }
+
+        body {
+            font-family: "Plus Jakarta Sans", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: var(--sidebar-width);
+            height: 100vh;
+
+            background: white;
+            border-right: 1px solid var(--border);
+
+            padding: 25px 16px;
+
+            display: flex;
+            flex-direction: column;
+
+            z-index: 100;
+
+            transition: transform 0.25s ease;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            padding: 0 10px;
+            margin-bottom: 35px;
+        }
+
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 12px;
+
+            background: linear-gradient(
+                135deg,
+                #635bff,
+                #8b7cff
+            );
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 19px;
+            font-weight: 800;
+
+            box-shadow:
+                0 7px 18px rgba(99, 91, 255, 0.25);
+        }
+
+        .brand-name {
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-name span {
+            color: var(--primary);
+        }
+
+        .nav-title {
+            font-size: 11px;
+            font-weight: 700;
+
+            color: #a1a2b2;
+
+            text-transform: uppercase;
+            letter-spacing: 1px;
+
+            padding: 0 12px;
+            margin-bottom: 10px;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .nav-item {
+            border: none;
+            background: transparent;
+
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            padding: 12px 13px;
+
+            border-radius: 11px;
+
+            color: #686a7e;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            text-align: left;
+
+            transition:
+                background 0.2s,
+                color 0.2s,
+                transform 0.2s;
+        }
+
+        .nav-item:hover {
+            background: #f5f4ff;
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .nav-item i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .profile-mini {
+            padding: 13px;
+
+            border: 1px solid var(--border);
+            border-radius: 13px;
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            margin-bottom: 10px;
+        }
+
+        .avatar {
+            width: 37px;
+            height: 37px;
+
+            border-radius: 50%;
+
+            background: var(--primary-light);
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 13px;
+            font-weight: 800;
+
+            flex-shrink: 0;
+        }
+
+        .profile-mini-info {
+            min-width: 0;
+        }
+
+        .profile-mini-name {
+            font-size: 12px;
+            font-weight: 700;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .profile-mini-email {
+            font-size: 10px;
+            color: var(--muted);
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            margin-top: 2px;
+        }
+
+        .logout-btn {
+            width: 100%;
+
+            border: none;
+            background: transparent;
+
+            color: #73758a;
+
+            padding: 11px 13px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            text-align: left;
+        }
+
+        .logout-btn:hover {
+            background: #fff1f1;
+            color: var(--danger);
+        }
+
+        /* =========================
+           MOBILE HEADER
+        ========================= */
+
+        .mobile-header {
+            display: none;
+
+            height: 65px;
+
+            background: white;
+            border-bottom: 1px solid var(--border);
+
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 18px;
+
+            position: sticky;
+            top: 0;
+
+            z-index: 90;
+        }
+
+        .mobile-header .brand {
+            margin: 0;
+        }
+
+        .menu-btn {
+            border: none;
+            background: transparent;
+
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            margin-left: var(--sidebar-width);
+
+            min-height: 100vh;
+
+            padding: 32px;
+
+            transition:
+                opacity 0.18s ease,
+                transform 0.18s ease;
+        }
+
+        .main.page-changing {
+            opacity: 0;
+            transform: translateY(5px);
+        }
+
+        /* =========================
+           TOPBAR
+        ========================= */
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 28px;
+        }
+
+        .welcome h1 {
+            font-size: 26px;
+            letter-spacing: -0.8px;
+            margin-bottom: 6px;
+        }
+
+        .welcome p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .date-box {
+            display: flex;
+            align-items: center;
+
+            gap: 8px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            padding: 10px 13px;
+
+            border-radius: 10px;
+        }
+
+        /* =========================
+           PAGE CONTENT
+        ========================= */
+
+        #pageContent {
+            min-height: 500px;
+        }
+
+        /* =========================
+           DASHBOARD HERO
+        ========================= */
+
+        .hero {
+            background:
+                linear-gradient(
+                    120deg,
+                    #635bff,
+                    #776eff
+                );
+
+            border-radius: 18px;
+
+            padding: 27px 29px;
+
+            color: white;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            overflow: hidden;
+
+            position: relative;
+
+            margin-bottom: 24px;
+
+            box-shadow:
+                0 14px 35px rgba(99, 91, 255, 0.16);
+        }
+
+        .hero::after {
+            content: "";
+
+            position: absolute;
+
+            width: 250px;
+            height: 250px;
+
+            border-radius: 50%;
+
+            background: rgba(255,255,255,0.07);
+
+            right: -70px;
+            top: -100px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-label {
+            font-size: 11px;
+            font-weight: 700;
+
+            opacity: 0.8;
+
+            margin-bottom: 7px;
+
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero h2 {
+            font-size: 21px;
+            margin-bottom: 7px;
+        }
+
+        .hero p {
+            font-size: 12px;
+            opacity: 0.86;
+            max-width: 500px;
+        }
+
+        .hero-btn {
+            position: relative;
+            z-index: 2;
+
+            border: none;
+
+            background: white;
+            color: var(--primary);
+
+            padding: 12px 17px;
+
+            border-radius: 10px;
+
+            font-weight: 700;
+            font-size: 12px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 7px;
+
+            white-space: nowrap;
+        }
+
+        /* =========================
+           STATS
+        ========================= */
+
+        .stats-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 16px;
+
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 15px;
+
+            padding: 18px;
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 17px;
+        }
+
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+
+            border-radius: 10px;
+
+            background: var(--primary-light);
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-change {
+            font-size: 10px;
+
+            color: var(--success);
+
+            font-weight: 700;
+        }
+
+        .stat-value {
+            font-size: 25px;
+
+            font-weight: 800;
+
+            letter-spacing: -0.7px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+
+            color: var(--muted);
+
+            margin-top: 4px;
+        }
+
+        /* =========================
+           CONTENT GRID
+        ========================= */
+
+        .content-grid {
+            display: grid;
+
+            grid-template-columns:
+                1.6fr 1fr;
+
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 16px;
+
+            padding: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 18px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .card-link {
+            border: none;
+            background: transparent;
+
+            color: var(--primary);
+
+            font-size: 11px;
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        /* =========================
+           QUICK ACTIONS
+        ========================= */
+
+        .quick-actions {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+        }
+
+        .action-card {
+            border: 1px solid var(--border);
+
+            border-radius: 13px;
+
+            padding: 17px;
+
+            cursor: pointer;
+
+            transition:
+                border 0.2s,
+                transform 0.2s,
+                box-shadow 0.2s;
+        }
+
+        .action-card:hover {
+            border-color: #cfcaff;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 7px 20px rgba(30,30,60,0.05);
+        }
+
+        .action-icon {
+            width: 35px;
+            height: 35px;
+
+            background: var(--primary-light);
+            color: var(--primary);
+
+            border-radius: 9px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 12px;
+        }
+
+        .action-card h3 {
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .action-card p {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            line-height: 1.5;
+        }
+
+        /* =========================
+           ACTIVITY
+        ========================= */
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+
+            gap: 11px;
+
+            padding: 12px 0;
+
+            border-bottom:
+                1px solid #f0f0f5;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 34px;
+            height: 34px;
+
+            border-radius: 9px;
+
+            background: #f5f4ff;
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+        }
+
+        .activity-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .activity-info strong {
+            font-size: 11px;
+
+            display: block;
+
+            margin-bottom: 3px;
+        }
+
+        .activity-info span {
+            font-size: 9px;
+            color: var(--muted);
+        }
+
+        .activity-score {
+            font-size: 11px;
+
+            font-weight: 800;
+
+            color: var(--success);
+        }
+
+        .empty-state {
+            text-align: center;
+
+            padding: 30px 10px;
+
+            color: var(--muted);
+        }
+
+        .empty-state i {
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 11px;
+        }
+
+        /* =========================
+           PROGRESS
+        ========================= */
+
+        .progress-box {
+            margin-top: 20px;
+        }
+
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 8px;
+        }
+
+        .progress-top span {
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .progress-top span:last-child {
+            color: var(--primary);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 7px;
+
+            border-radius: 20px;
+
+            background: #eeeeF5;
+
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+
+            background: var(--primary);
+
+            border-radius: inherit;
+
+            transition:
+                width 0.5s ease;
+        }
+
+        /* =========================
+           INNER PAGES
+        ========================= */
+
+        .inner-page {
+            animation: pageIn 0.25s ease;
+        }
+
+        @keyframes pageIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-heading {
+            margin-bottom: 24px;
+        }
+
+        .page-heading h2 {
+            font-size: 25px;
+            letter-spacing: -0.7px;
+            margin-bottom: 6px;
+        }
+
+        .page-heading p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .feature-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 16px;
+        }
+
+        .feature-card {
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 16px;
+
+            padding: 22px;
+        }
+
+        .feature-icon {
+            width: 44px;
+            height: 44px;
+
+            border-radius: 12px;
+
+            background: var(--primary-light);
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 14px;
+            margin-bottom: 7px;
+        }
+
+        .feature-card p {
+            font-size: 11px;
+
+            color: var(--muted);
+
+            line-height: 1.6;
+        }
+
+        .coming-box {
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 16px;
+
+            padding: 40px 25px;
+
+            text-align: center;
+        }
+
+        .coming-icon {
+            width: 58px;
+            height: 58px;
+
+            margin: 0 auto 16px;
+
+            border-radius: 16px;
+
+            background: var(--primary-light);
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .coming-box h3 {
+            font-size: 18px;
+            margin-bottom: 7px;
+        }
+
+        .coming-box p {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* =========================
+           PROFILE PAGE
+        ========================= */
+
+        .profile-page-card {
+            max-width: 760px;
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            border-radius: 16px;
+
+            padding: 25px;
+        }
+
+        .profile-page-top {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            padding-bottom: 20px;
+
+            margin-bottom: 22px;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .large-avatar {
+            width: 58px;
+            height: 58px;
+
+            border-radius: 50%;
+
+            background: var(--primary-light);
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .profile-page-top h3 {
+            font-size: 17px;
+            margin-bottom: 4px;
+        }
+
+        .profile-page-top p {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .profile-info-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 15px;
+        }
+
+        .profile-field {
+            padding: 15px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 12px;
+        }
+
+        .profile-field span {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-bottom: 6px;
+        }
+
+        .profile-field strong {
+            font-size: 12px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 1100px) {
+
+            .stats-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .mobile-header {
+                display: flex;
+            }
+
+            .main {
+                margin-left: 0;
+
+                padding:
+                    22px 17px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+            }
+
+            .date-box {
+                display: none;
+            }
+
+            .hero {
+                padding: 22px;
+
+                align-items: flex-start;
+
+                gap: 18px;
+
+                flex-direction: column;
+            }
+
+            .hero-btn {
+                width: 100%;
+
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .stats-grid {
+                grid-template-columns:
+                    1fr 1fr;
+
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 14px;
+            }
+
+            .stat-value {
+                font-size: 21px;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome h1 {
+                font-size: 22px;
+            }
+
+            .hero h2 {
+                font-size: 18px;
+            }
+        }
+
+
+        /* =========================
+   AI QUIZ BUILDER
+========================= */
+
+.quiz-builder {
+    max-width: 850px;
+}
+
+.quiz-builder-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px;
+}
+
+.builder-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    background: var(--primary-light);
+    color: var(--primary);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 15px;
+}
+
+.quiz-builder-card h3 {
+    font-size: 19px;
+    margin-bottom: 7px;
+}
+
+.builder-subtitle {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 17px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-group label {
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    height: 44px;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    padding: 0 13px;
+
+    outline: none;
+
+    color: var(--text);
+    background: white;
+
+    font-size: 12px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.timer-option {
+    margin-top: 20px;
+
+    padding: 14px;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.timer-option strong {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.timer-option span {
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.switch {
+    position: relative;
+    width: 42px;
+    height: 23px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+
+    background: #d9d9e3;
+
+    border-radius: 20px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.slider::before {
+    content: "";
+
+    position: absolute;
+
+    width: 17px;
+    height: 17px;
+
+    left: 3px;
+    top: 3px;
+
+    background: white;
+
+    border-radius: 50%;
+
+    transition: 0.2s;
+}
+
+.switch input:checked + .slider {
+    background: var(--primary);
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(19px);
+}
+
+.timer-select {
+    margin-top: 15px;
+}
+
+.quiz-error {
+    display: none;
+
+    margin-top: 15px;
+
+    padding: 11px;
+
+    border-radius: 9px;
+
+    background: #fff1f1;
+    color: var(--danger);
+
+    font-size: 11px;
+}
+
+.generate-btn {
+    width: 100%;
+
+    height: 46px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background: var(--primary);
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    margin-top: 20px;
+
+    transition: 0.2s;
+}
+
+.generate-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+.generate-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* =========================
+   QUIZ AREA
+========================= */
+
+.quiz-area {
+    max-width: 850px;
+    margin-top: 22px;
+}
+
+.quiz-running {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 25px;
+}
+
+.quiz-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 22px;
+}
+
+.quiz-progress-text {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.quiz-timer {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    background: var(--primary-light);
+    color: var(--primary);
+
+    padding: 8px 12px;
+
+    border-radius: 9px;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.quiz-question {
+    font-size: 17px;
+    line-height: 1.6;
+
+    margin-bottom: 20px;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.option {
+    width: 100%;
+
+    padding: 14px;
+
+    border: 1px solid var(--border);
+    border-radius: 11px;
+
+    background: white;
+
+    text-align: left;
+
+    font-size: 12px;
+
+    transition: 0.2s;
+}
+
+.option:hover {
+    border-color: #c8c4ff;
+    background: #faf9ff;
+}
+
+.option.selected {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.quiz-actions {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 22px;
+}
+
+.quiz-nav-btn {
+    border: none;
+
+    padding: 11px 17px;
+
+    border-radius: 9px;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.quiz-nav-btn.secondary {
+    background: #f1f1f6;
+    color: var(--text);
+}
+
+.quiz-nav-btn.primary {
+    background: var(--primary);
+    color: white;
+}
+
+.quiz-nav-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* =========================
+   RESULT
+========================= */
+
+.quiz-result {
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    padding: 35px;
+
+    text-align: center;
+}
+
+.result-circle {
+    width: 100px;
+    height: 100px;
+
+    border-radius: 50%;
+
+    background: var(--primary-light);
+    color: var(--primary);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.quiz-result h2 {
+    font-size: 21px;
+    margin-bottom: 7px;
+}
+
+.quiz-result p {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.result-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin-top: 25px;
+}
+
+.result-stat {
+    border: 1px solid var(--border);
+
+    border-radius: 11px;
+
+    padding: 15px;
+}
+
+.result-stat strong {
+    display: block;
+
+    font-size: 19px;
+
+    margin-bottom: 4px;
+}
+
+.result-stat span {
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+@media (max-width: 600px) {
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quiz-builder-card,
+    .quiz-running,
+    .quiz-result {
+        padding: 19px;
+    }
+
+    .result-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+.quiz-error {
+    display: none;
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 10px;
+}
+
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         MOBILE HEADER
+    ========================= -->
+
+    <header class="mobile-header">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                Q
+            </div>
+
+            <div class="brand-name">
+                Quiz<span>One</span>
+            </div>
+
+        </div>
+
+        <button
+            class="menu-btn"
+            id="menuBtn"
+            type="button"
+        >
+            <i data-lucide="menu"></i>
+        </button>
+
+    </header>
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                Q
+            </div>
+
+            <div class="brand-name">
+                Quiz<span>One</span>
+            </div>
+
+        </div>
+
+
+        <div class="nav-title">
+            Main Menu
+        </div>
+
+
+        <nav class="nav">
+
+            <button
+                class="nav-item active"
+                data-page="dashboard"
+                type="button"
+            >
+                <i data-lucide="layout-dashboard"></i>
+                Dashboard
+            </button>
+
+
+            <button
+                class="nav-item"
+                data-page="quiz"
+                type="button"
+            >
+                <i data-lucide="sparkles"></i>
+                AI Quiz
+            </button>
+
+
+            <button
+                class="nav-item"
+                data-page="practice"
+                type="button"
+            >
+                <i data-lucide="book-open"></i>
+                Practice
+            </button>
+
+
+            <button
+                class="nav-item"
+                data-page="analytics"
+                type="button"
+            >
+                <i data-lucide="chart-no-axes-combined"></i>
+                Analytics
+            </button>
+
+
+            <button
+                class="nav-item"
+                data-page="profile"
+                type="button"
+            >
+                <i data-lucide="user-round"></i>
+                Profile
+            </button>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="profile-mini">
+
+                <div
+                    class="avatar"
+                    id="sideAvatar"
+                >
+                    U
+                </div>
+
+                <div class="profile-mini-info">
+
+                    <div
+                        class="profile-mini-name"
+                        id="sideName"
+                    >
+                        Student
+                    </div>
+
+                    <div
+                        class="profile-mini-email"
+                        id="sideEmail"
+                    >
+                        Loading...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="logout-btn"
+                id="logoutBtn"
+                type="button"
+            >
+
+                <i data-lucide="log-out"></i>
+
+                Logout
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN APP
+    ========================= -->
+
+    <main class="main" id="mainContent">
+
+        <div class="topbar">
+
+            <div class="welcome">
+
+                <h1 id="welcomeText">
+                    Welcome back 👋
+                </h1>
+
+                <p id="pageSubtitle">
+                    Continue your preparation and keep improving.
+                </p>
+
+            </div>
+
+
+            <div class="date-box">
+
+                <i data-lucide="calendar-days"></i>
+
+                <span id="currentDate">
+                    Loading...
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!--
+            ALL PAGE CONTENT WILL BE
+            INSERTED HERE WITHOUT
+            FULL PAGE REFRESH
+        -->
+
+        <div id="pageContent"></div>
+
+    </main>
+
+
+    <script>
+
+
+/* =========================================
+   GLOBAL USER
+========================================= */
+
+let currentUser = null;
+
+
+/* =========================================
+   QUIZ GLOBAL VARIABLES
+========================================= */
+
+let generatedQuiz = [];
+let currentQuestion = 0;
+let selectedAnswers = [];
+let quizTimerInterval = null;
+let quizSecondsLeft = 0;
+
+
+/* =========================================
+   PAGE TEMPLATES
+========================================= */
+
+function dashboardPage() {
+
+    return `
+
+        <div class="inner-page">
+
+            <section class="hero">
+
+                <div class="hero-content">
+
+                    <div class="hero-label">
+                        Ready to learn?
+                    </div>
+
+                    <h2>
+                        Test your knowledge with AI
+                    </h2>
+
+                    <p>
+                        Generate personalized quizzes based on
+                        your subject, topic and difficulty level.
+                    </p>
+
+                </div>
+
+                <button
+                    class="hero-btn"
+                    data-page="quiz"
+                    type="button"
+                >
+                    Start AI Quiz
+                    <i data-lucide="arrow-right"></i>
+                </button>
+
+            </section>
+
+
+            <section class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon">
+                            <i data-lucide="file-question"></i>
+                        </div>
+
+                        <span class="stat-change">
+                            Quiz
+                        </span>
+
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="totalQuizzes"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-label">
+                        Quizzes Completed
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon">
+                            <i data-lucide="target"></i>
+                        </div>
+
+                        <span class="stat-change">
+                            Score
+                        </span>
+
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="averageScore"
+                    >
+                        0%
+                    </div>
+
+                    <div class="stat-label">
+                        Average Score
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon">
+                            <i data-lucide="trophy"></i>
+                        </div>
+
+                        <span class="stat-change">
+                            Best
+                        </span>
+
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="bestScore"
+                    >
+                        0%
+                    </div>
+
+                    <div class="stat-label">
+                        Best Score
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon">
+                            <i data-lucide="brain"></i>
+                        </div>
+
+                        <span class="stat-change">
+                            Practice
+                        </span>
+
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="questionsPracticed"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-label">
+                        Questions Practiced
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <section class="content-grid">
+
+                <div>
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <div class="card-title">
+                                Quick Actions
+                            </div>
+
+                        </div>
+
+
+                        <div class="quick-actions">
+
+                            <div
+                                class="action-card"
+                                data-page="quiz"
+                            >
+
+                                <div class="action-icon">
+                                    <i data-lucide="sparkles"></i>
+                                </div>
+
+                                <h3>
+                                    AI Quiz
+                                </h3>
+
+                                <p>
+                                    Generate a personalized quiz instantly.
+                                </p>
+
+                            </div>
+
+
+                            <div
+                                class="action-card"
+                                data-page="practice"
+                            >
+
+                                <div class="action-icon">
+                                    <i data-lucide="book-open-check"></i>
+                                </div>
+
+                                <h3>
+                                    Practice
+                                </h3>
+
+                                <p>
+                                    Practice questions and improve concepts.
+                                </p>
+
+                            </div>
+
+
+                            <div
+                                class="action-card"
+                                data-page="analytics"
+                            >
+
+                                <div class="action-icon">
+                                    <i data-lucide="chart-no-axes-combined"></i>
+                                </div>
+
+                                <h3>
+                                    Analytics
+                                </h3>
+
+                                <p>
+                                    Track your performance and weak topics.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card progress-box">
+
+                        <div class="card-header">
+
+                            <div class="card-title">
+                                Your Learning Progress
+                            </div>
+
+                            <button
+                                class="card-link"
+                                data-page="analytics"
+                                type="button"
+                            >
+                                View Analytics
+                            </button>
+
+                        </div>
+
+
+                        <div class="progress-top">
+
+                            <span>
+                                Overall Progress
+                            </span>
+
+                            <span id="progressPercent">
+                                0%
+                            </span>
+
+                        </div>
+
+
+                        <div class="progress-bar">
+
+                            <div
+                                class="progress-fill"
+                                id="progressFill"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div class="card-title">
+                            Recent Activity
+                        </div>
+
+                        <button
+                            class="card-link"
+                            data-page="analytics"
+                            type="button"
+                        >
+                            View All
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="activity-list"
+                        id="activityList"
+                    >
+
+                        <div class="empty-state">
+
+                            <i data-lucide="clipboard-list"></i>
+
+                            <p>
+                                No quiz activity yet.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    `;
+}
+
+
+function quizPage() {
+
+    return `
+
+        <div class="inner-page">
+
+            <div class="page-heading">
+
+                <h2>
+                    AI Quiz
+                </h2>
+
+                <p>
+                    Create a personalized quiz with AI.
+                </p>
+
+            </div>
+
+
+            <div class="quiz-builder">
+
+                <div class="quiz-builder-card">
+
+                    <div class="builder-icon">
+                        <i data-lucide="sparkles"></i>
+                    </div>
+
+                    <h3>
+                        Create Your Quiz
+                    </h3>
+
+                    <p class="builder-subtitle">
+                        Select your preferences and let QuizOne
+                        generate questions for you.
+                    </p>
+
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label>
+                                Subject
+                            </label>
+
+                            <input
+                                type="text"
+                                id="quizSubject"
+                                placeholder="e.g. Data Structures"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Topic
+                            </label>
+
+                            <input
+                                type="text"
+                                id="quizTopic"
+                                placeholder="e.g. Linked List"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Difficulty
+                            </label>
+
+                            <select id="quizDifficulty">
+
+                                <option value="easy">
+                                    Easy
+                                </option>
+
+                                <option
+                                    value="medium"
+                                    selected
+                                >
+                                    Medium
+                                </option>
+
+                                <option value="hard">
+                                    Hard
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Questions
+                            </label>
+
+                            <select id="quizCount">
+
+                                <option value="5">
+                                    5 Questions
+                                </option>
+
+                                <option
+                                    value="10"
+                                    selected
+                                >
+                                    10 Questions
+                                </option>
+
+                                <option value="15">
+                                    15 Questions
+                                </option>
+
+                                <option value="20">
+                                    20 Questions
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="timer-option">
+
+                        <div>
+
+                            <strong>
+                                Enable Timer
+                            </strong>
+
+                            <span>
+                                Complete the quiz within the time limit.
+                            </span>
+
+                        </div>
+
+
+                        <label class="switch">
+
+                            <input
+                                type="checkbox"
+                                id="enableTimer"
+                                checked
+                            >
+
+                            <span class="slider"></span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div
+                        class="form-group timer-select"
+                        id="timerSelectBox"
+                    >
+
+                        <label>
+                            Time Limit
+                        </label>
+
+                        <select id="quizTime">
+
+                            <option value="5">
+                                5 Minutes
+                            </option>
+
+                            <option
+                                value="10"
+                                selected
+                            >
+                                10 Minutes
+                            </option>
+
+                            <option value="15">
+                                15 Minutes
+                            </option>
+
+                            <option value="20">
+                                20 Minutes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div
+                        class="quiz-error"
+                        id="quizError"
+                    ></div>
+
+
+                    <button
+                        class="generate-btn"
+                        id="generateQuizBtn"
+                        type="button"
+                    >
+
+                        <i data-lucide="wand-sparkles"></i>
+
+                        Generate AI Quiz
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="quizArea"
+                class="quiz-area"
+            ></div>
+
+        </div>
+
+    `;
+}
+
+
+function practicePage() {
+
+    return `
+
+        <div class="inner-page">
+
+            <div class="page-heading">
+
+                <h2>
+                    Practice
+                </h2>
+
+                <p>
+                    Strengthen your concepts through regular practice.
+                </p>
+
+            </div>
+
+
+            <div class="feature-grid">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i data-lucide="book-open-check"></i>
+                    </div>
+
+                    <h3>
+                        Practice Questions
+                    </h3>
+
+                    <p>
+                        Solve questions by subject and topic
+                        to improve your preparation.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i data-lucide="brain"></i>
+                    </div>
+
+                    <h3>
+                        Improve Concepts
+                    </h3>
+
+                    <p>
+                        Focus on the concepts where you need
+                        more practice.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i data-lucide="repeat-2"></i>
+                    </div>
+
+                    <h3>
+                        Keep Practicing
+                    </h3>
+
+                    <p>
+                        Build consistency by practicing
+                        regularly.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="coming-box"
+                style="margin-top:20px;"
+            >
+
+                <div class="coming-icon">
+                    <i data-lucide="book-open"></i>
+                </div>
+
+                <h3>
+                    Practice Mode Coming Next
+                </h3>
+
+                <p>
+                    The practice question interface will be
+                    added here.
+                </p>
+
+            </div>
+
+        </div>
+
+    `;
+}
+
+
+function analyticsPage() {
+
+    return `
+
+        <div class="inner-page">
+
+            <div class="page-heading">
+
+                <h2>
+                    Analytics
+                </h2>
+
+                <p>
+                    Understand your performance and track your progress.
+                </p>
+
+            </div>
+
+
+            <div class="feature-grid">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i data-lucide="chart-no-axes-combined"></i>
+                    </div>
+
+                    <h3>
+                        Performance
+                    </h3>
+
+                    <p>
+                        Track your quiz scores and overall
+                        preparation progress.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i data-lucide="triangle-alert"></i>
+                    </div>
+
+                    <h3>
+                        Weak Topics
+                    </h3>
+
+                    <p>
+                        Identify topics where your performance
+                        needs improvement.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i data-lucide="trending-up"></i>
+                    </div>
+
+                    <h3>
+                        Progress
+                    </h3>
+
+                    <p>
+                        See how your performance changes over
+                        time.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="coming-box"
+                style="margin-top:20px;"
+            >
+
+                <div class="coming-icon">
+                    <i data-lucide="chart-spline"></i>
+                </div>
+
+                <h3>
+                    Analytics Dashboard Coming Next
+                </h3>
+
+                <p>
+                    Charts and real Supabase quiz history
+                    will be connected here.
+                </p>
+
+            </div>
+
+        </div>
+
+    `;
+}
+
+
+function profilePage() {
+
+    const metadata =
+        currentUser?.user_metadata || {};
+
+    const name =
+        metadata.full_name ||
+        currentUser?.email?.split("@")[0] ||
+        "Student";
+
+    const college =
+        metadata.college ||
+        "Not added";
+
+    const course =
+        metadata.course ||
+        "Not added";
+
+    const year =
+        metadata.year ||
+        "Not added";
+
+    const department =
+        metadata.department ||
+        "Not added";
+
+    const initials =
+        name
+            .split(" ")
+            .filter(Boolean)
+            .slice(0, 2)
+            .map(word => word[0])
+            .join("")
+            .toUpperCase();
+
+
+    return `
+
+        <div class="inner-page">
+
+            <div class="page-heading">
+
+                <h2>
+                    Profile
+                </h2>
+
+                <p>
+                    View your QuizOne account information.
+                </p>
+
+            </div>
+
+
+            <div class="profile-page-card">
+
+                <div class="profile-page-top">
+
+                    <div class="large-avatar">
+                        ${escapeHTML(initials || "U")}
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            ${escapeHTML(name)}
+                        </h3>
+
+                        <p>
+                            ${escapeHTML(
+                                currentUser?.email || ""
+                            )}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-info-grid">
+
+                    <div class="profile-field">
+
+                        <span>
+                            Full Name
+                        </span>
+
+                        <strong>
+                            ${escapeHTML(name)}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            Email
+                        </span>
+
+                        <strong>
+                            ${escapeHTML(
+                                currentUser?.email ||
+                                "Not available"
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            College / Institution
+                        </span>
+
+                        <strong>
+                            ${escapeHTML(college)}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            Course
+                        </span>
+
+                        <strong>
+                            ${escapeHTML(course)}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            Year
+                        </span>
+
+                        <strong>
+                            ${escapeHTML(year)}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-field">
+
+                        <span>
+                            Department
+                        </span>
+
+                        <strong>
+                            ${escapeHTML(department)}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div style="margin-top:20px;">
+
+                    <button
+                        class="hero-btn"
+                        data-profile-edit="true"
+                        type="button"
+                    >
+
+                        <i data-lucide="pencil"></i>
+
+                        Edit Profile
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+}
+
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+async function navigate(page, updateURL = true) {
+
+    const main =
+        document.getElementById("mainContent");
+
+    const pageContent =
+        document.getElementById("pageContent");
+
+
+    main.classList.add("page-changing");
+
+
+    await new Promise(resolve =>
+        setTimeout(resolve, 120)
+    );
+
+
+    let html = "";
+    let subtitle = "";
+
+
+    switch (page) {
+
+        case "quiz":
+
+            html = quizPage();
+
+            subtitle =
+                "Create personalized AI-powered quizzes.";
+
+            break;
+
+
+        case "practice":
+
+            html = practicePage();
+
+            subtitle =
+                "Practice questions and strengthen your concepts.";
+
+            break;
+
+
+        case "analytics":
+
+            html = analyticsPage();
+
+            subtitle =
+                "Track your performance and learning progress.";
+
+            break;
+
+
+        case "profile":
+
+            html = profilePage();
+
+            subtitle =
+                "Manage and view your QuizOne profile.";
+
+            break;
+
+
+        default:
+
+            page = "dashboard";
+
+            html = dashboardPage();
+
+            subtitle =
+                "Continue your preparation and keep improving.";
+
+            break;
+
+    }
+
+
+    pageContent.innerHTML = html;
+
+
+    const subtitleElement =
+        document.getElementById("pageSubtitle");
+
+    if (subtitleElement) {
+        subtitleElement.textContent = subtitle;
+    }
+
+
+    document
+        .querySelectorAll(".nav-item")
+        .forEach(item => {
+
+            item.classList.toggle(
+                "active",
+                item.dataset.page === page
+            );
+
+        });
+
+
+    if (updateURL) {
+
+        history.pushState(
+            { page: page },
+            "",
+            "#" + page
+        );
+
+    }
+
+
+    if (typeof lucide !== "undefined") {
+        lucide.createIcons();
+    }
+
+
+    main.classList.remove("page-changing");
+
+
+    attachDynamicNavigation();
+
+
+    if (page === "dashboard") {
+        loadQuizStats();
+    }
+
+
+    if (page === "quiz") {
+        initializeQuizBuilder();
+    }
+
+}
+
+
+/* =========================================
+   DYNAMIC NAVIGATION
+========================================= */
+
+function attachDynamicNavigation() {
+
+    document
+        .querySelectorAll("[data-page]")
+        .forEach(element => {
+
+            if (
+                element.dataset.navigationAttached ===
+                "true"
+            ) {
+                return;
+            }
+
+
+            element.dataset.navigationAttached =
+                "true";
+
+
+            element.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+
+
+                    const page =
+                        element.dataset.page;
+
+
+                    if (page) {
+                        navigate(page);
+                    }
+
+
+                    closeMobileSidebar();
+
+                }
+            );
+
+        });
+
+}
+
+
+/* =========================================
+   BROWSER BACK / FORWARD
+========================================= */
+
+window.addEventListener(
+    "popstate",
+    () => {
+
+        navigate(
+            getPageFromURL(),
+            false
+        );
+
+    }
+);
+
+
+function getPageFromURL() {
+
+    const page =
+        window.location.hash
+            .replace("#", "")
+            .trim();
+
+
+    const allowedPages = [
+        "dashboard",
+        "quiz",
+        "practice",
+        "analytics",
+        "profile"
+    ];
+
+
+    if (
+        allowedPages.includes(page)
+    ) {
+        return page;
+    }
+
+
+    return "dashboard";
+
+}
+
+
+/* =========================================
+   USER DATA
+========================================= */
+
+async function loadUser() {
+
+    currentUser =
+        await getCurrentUser();
+
+
+    if (!currentUser) {
+
+        window.location.href =
+            "login.html";
+
+        return false;
+
+    }
+
+
+    const metadata =
+        currentUser.user_metadata || {};
+
+
+    const name =
+        metadata.full_name ||
+        currentUser.email?.split("@")[0] ||
+        "Student";
+
+
+    const initials =
+        name
+            .split(" ")
+            .filter(Boolean)
+            .slice(0, 2)
+            .map(word => word[0])
+            .join("")
+            .toUpperCase();
+
+
+    const welcome =
+        document.getElementById("welcomeText");
+
+    if (welcome) {
+
+        welcome.textContent =
+            `Welcome back, ${name.split(" ")[0]} 👋`;
+
+    }
+
+
+    const sideName =
+        document.getElementById("sideName");
+
+    if (sideName) {
+        sideName.textContent = name;
+    }
+
+
+    const sideEmail =
+        document.getElementById("sideEmail");
+
+    if (sideEmail) {
+        sideEmail.textContent =
+            currentUser.email || "";
+    }
+
+
+    const sideAvatar =
+        document.getElementById("sideAvatar");
+
+    if (sideAvatar) {
+        sideAvatar.textContent =
+            initials || "U";
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================
+   QUIZ STATS
+========================================= */
+
+async function loadQuizStats() {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("quiz_results")
+            .select("*")
+            .eq(
+                "user_id",
+                currentUser.id
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if (error) {
+
+            console.log(
+                "Quiz results not available yet:",
+                error.message
+            );
+
+            return;
+
+        }
+
+
+        if (!data || data.length === 0) {
+
+            return;
+
+        }
+
+
+        const total =
+            data.length;
+
+
+        const totalElement =
+            document.getElementById(
+                "totalQuizzes"
+            );
+
+
+        if (totalElement) {
+            totalElement.textContent =
+                total;
+        }
+
+
+        const scores =
+            data
+                .map(item => {
+
+                    const percentage =
+                        Number(item.percentage);
+
+                    if (
+                        !isNaN(percentage)
+                    ) {
+                        return percentage;
+                    }
+
+
+                    const score =
+                        Number(item.score);
+
+                    const totalQuestions =
+                        Number(
+                            item.total_questions
+                        );
+
+
+                    if (
+                        totalQuestions > 0 &&
+                        !isNaN(score)
+                    ) {
+
+                        return (
+                            score /
+                            totalQuestions
+                        ) * 100;
+
+                    }
+
+
+                    return null;
+
+                })
+                .filter(
+                    score =>
+                        score !== null &&
+                        !isNaN(score)
+                );
+
+
+        if (scores.length > 0) {
+
+            const average =
+                scores.reduce(
+                    (sum, value) =>
+                        sum + value,
+                    0
+                ) /
+                scores.length;
+
+
+            const best =
+                Math.max(...scores);
+
+
+            const averageElement =
+                document.getElementById(
+                    "averageScore"
+                );
+
+
+            const bestElement =
+                document.getElementById(
+                    "bestScore"
+                );
+
+
+            const progressElement =
+                document.getElementById(
+                    "progressPercent"
+                );
+
+
+            const progressFill =
+                document.getElementById(
+                    "progressFill"
+                );
+
+
+            if (averageElement) {
+
+                averageElement.textContent =
+                    `${Math.round(average)}%`;
+
+            }
+
+
+            if (bestElement) {
+
+                bestElement.textContent =
+                    `${Math.round(best)}%`;
+
+            }
+
+
+            if (progressElement) {
+
+                progressElement.textContent =
+                    `${Math.round(average)}%`;
+
+            }
+
+
+            if (progressFill) {
+
+                progressFill.style.width =
+                    `${Math.min(
+                        Math.round(average),
+                        100
+                    )}%`;
+
+            }
+
+        }
+
+
+        let questions = 0;
+
+
+        data.forEach(item => {
+
+            const totalQuestions =
+                Number(
+                    item.total_questions
+                );
+
+
+            if (
+                !isNaN(totalQuestions)
+            ) {
+
+                questions +=
+                    totalQuestions;
+
+            }
+
+        });
+
+
+        const questionsElement =
+            document.getElementById(
+                "questionsPracticed"
+            );
+
+
+        if (questionsElement) {
+
+            questionsElement.textContent =
+                questions;
+
+        }
+
+
+        renderActivity(
+            data.slice(0, 5)
+        );
+
+
+    } catch (error) {
+
+        console.log(
+            "Dashboard statistics error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   RECENT ACTIVITY
+========================================= */
+
+function renderActivity(items) {
+
+    const list =
+        document.getElementById(
+            "activityList"
+        );
+
+
+    if (!list) {
+        return;
+    }
+
+
+    if (!items || items.length === 0) {
+        return;
+    }
+
+
+    list.innerHTML = "";
+
+
+    items.forEach(item => {
+
+        let score = 0;
+
+
+        const percentage =
+            Number(item.percentage);
+
+
+        if (!isNaN(percentage)) {
+
+            score =
+                percentage;
+
+        } else {
+
+            const itemScore =
+                Number(item.score);
+
+            const totalQuestions =
+                Number(
+                    item.total_questions
+                );
+
+
+            if (
+                totalQuestions > 0 &&
+                !isNaN(itemScore)
+            ) {
+
+                score =
+                    (
+                        itemScore /
+                        totalQuestions
+                    ) * 100;
+
+            }
+
+        }
+
+
+        const title =
+            item.topic ||
+            item.subject ||
+            item.quiz_title ||
+            "Quiz";
+
+
+        const date =
+            item.created_at
+                ? new Date(
+                    item.created_at
+                ).toLocaleDateString(
+                    "en-IN",
+                    {
+                        day: "numeric",
+                        month: "short"
+                    }
+                )
+                : "";
+
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+
+        div.className =
+            "activity-item";
+
+
+        div.innerHTML = `
+
+            <div class="activity-icon">
+
+                <i data-lucide="file-check-2"></i>
+
+            </div>
+
+            <div class="activity-info">
+
+                <strong>
+                    ${escapeHTML(title)}
+                </strong>
+
+                <span>
+                    ${escapeHTML(date)}
+                </span>
+
+            </div>
+
+            <div class="activity-score">
+                ${Math.round(score)}%
+            </div>
+
+        `;
+
+
+        list.appendChild(div);
+
+    });
+
+
+    if (typeof lucide !== "undefined") {
+        lucide.createIcons();
+    }
+
+}
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================
+   MOBILE SIDEBAR
+========================================= */
+
+function closeMobileSidebar() {
+
+    const sidebar =
+        document.getElementById(
+            "sidebar"
+        );
+
+
+    if (sidebar) {
+
+        sidebar.classList.remove(
+            "open"
+        );
+
+    }
+
+}
+
+
+document
+    .getElementById("menuBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            document
+                .getElementById("sidebar")
+                .classList.toggle("open");
+
+        }
+    );
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+document
+    .getElementById("logoutBtn")
+    .addEventListener(
+        "click",
+        async () => {
+
+            const {
+                error
+            } = await logoutUser();
+
+
+            if (error) {
+
+                console.error(error);
+
+                return;
+
+            }
+
+
+            window.location.href =
+                "login.html";
+
+        }
+    );
+
+
+/* =========================================
+   DATE
+========================================= */
+
+document.getElementById(
+    "currentDate"
+).textContent =
+    new Date().toLocaleDateString(
+        "en-IN",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+
+/* =========================================
+   START APP
+========================================= */
+
+async function initApp() {
+
+    const authenticated =
+        await loadUser();
+
+
+    if (!authenticated) {
+        return;
+    }
+
+
+    await navigate(
+        getPageFromURL(),
+        false
+    );
+
+}
+
+
+initApp();
+
+
+/* =====================================================
+   AI QUIZ SYSTEM
+===================================================== */
+
+
+/* =========================================
+   INITIALIZE QUIZ BUILDER
+========================================= */
+
+function initializeQuizBuilder() {
+
+    const generateBtn =
+        document.getElementById(
+            "generateQuizBtn"
+        );
+
+
+    if (!generateBtn) {
+        return;
+    }
+
+
+    const timerToggle =
+        document.getElementById(
+            "enableTimer"
+        );
+
+
+    const timerBox =
+        document.getElementById(
+            "timerSelectBox"
+        );
+
+
+    if (
+        timerToggle &&
+        timerBox
+    ) {
+
+        timerBox.style.display =
+            timerToggle.checked
+                ? "flex"
+                : "none";
+
+
+        timerToggle.addEventListener(
+            "change",
+            () => {
+
+                timerBox.style.display =
+                    timerToggle.checked
+                        ? "flex"
+                        : "none";
+
+            }
+        );
+
+    }
+
+
+    generateBtn.addEventListener(
+        "click",
+        generateAIQuiz
+    );
+
+}
+
+
+/* =========================================
+   GENERATE AI QUIZ
+========================================= */
+
+async function generateAIQuiz() {
+
+    const subject =
+        document.getElementById(
+            "quizSubject"
+        )?.value.trim();
+
+
+    const topic =
+        document.getElementById(
+            "quizTopic"
+        )?.value.trim();
+
+
+    const difficulty =
+        document.getElementById(
+            "quizDifficulty"
+        )?.value;
+
+
+    const count =
+        Number(
+            document.getElementById(
+                "quizCount"
+            )?.value
+        );
+
+
+    const enableTimer =
+        document.getElementById(
+            "enableTimer"
+        )?.checked;
+
+
+    const timeLimit =
+        Number(
+            document.getElementById(
+                "quizTime"
+            )?.value || 10
+        );
+
+
+    const button =
+        document.getElementById(
+            "generateQuizBtn"
+        );
+
+
+    if (!subject) {
+
+        showQuizError(
+            "Please enter a subject."
+        );
+
+        return;
+
+    }
+
+
+    if (!topic) {
+
+        showQuizError(
+            "Please enter a topic."
+        );
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+
+    button.innerHTML = `
+
+        <i
+            data-lucide="loader-circle"
+        ></i>
+
+        Generating Quiz...
+
+    `;
+
+
+    if (typeof lucide !== "undefined") {
+        lucide.createIcons();
+    }
+
+
+    hideQuizError();
+
+
+    try {
+
+        const response =
+            await fetch(
+                "http://127.0.0.1:5000/api/ai/generate",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        subject:
+                            subject,
+
+                        topic:
+                            topic,
+
+                        difficulty:
+                            difficulty,
+
+                        count:
+                            count,
+
+                        type:
+                            "mcq"
+
+                    })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                result.error ||
+                "Quiz generation failed"
+            );
+
+        }
+
+
+        if (
+            !result.questions ||
+            !Array.isArray(result.questions) ||
+            result.questions.length === 0
+        ) {
+
+            throw new Error(
+                "No questions were generated."
+            );
+
+        }
+
+
+        /* =====================================
+           IMPORTANT
+           Normalize backend response ONCE
+        ===================================== */
+
+        generatedQuiz =
+            normalizeQuestions(
+                result.questions
+            );
+
+
+        if (
+            !generatedQuiz.length
+        ) {
+
+            throw new Error(
+                "Generated questions have invalid answer data."
+            );
+
+        }
+
+
+        if (
+            generatedQuiz.length !==
+            count
+        ) {
+
+            console.warn(
+                `Requested ${count} questions but received ${generatedQuiz.length}.`
+            );
+
+        }
+
+
+        /* =====================================
+           RESET QUIZ
+        ===================================== */
+
+        currentQuestion = 0;
+
+
+        selectedAnswers =
+            new Array(
+                generatedQuiz.length
+            ).fill(null);
+
+
+        clearInterval(
+            quizTimerInterval
+        );
+
+
+        /* =====================================
+           TIMER
+        ===================================== */
+
+        if (enableTimer) {
+
+            quizSecondsLeft =
+                timeLimit * 60;
+
+        } else {
+
+            quizSecondsLeft =
+                0;
+
+        }
+
+
+        /* =====================================
+           DEBUG
+        ===================================== */
+
+        console.log(
+            "========== GENERATED QUIZ =========="
+        );
+
+        console.log(
+            generatedQuiz
+        );
+
+
+        generatedQuiz.forEach(
+            (question, index) => {
+
+                console.log(
+                    `Q${index + 1}`,
+                    {
+                        question:
+                            question.question,
+
+                        options:
+                            question.options,
+
+                        correctAnswer:
+                            question.answer
+                    }
+                );
+
+            }
+        );
+
+
+        /* =====================================
+           SHOW FIRST QUESTION
+        ===================================== */
+
+        renderQuizQuestion();
+
+
+        if (enableTimer) {
+
+            startQuizTimer();
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Quiz generation error:",
+            error
+        );
+
+
+        showQuizError(
+            error.message ||
+            "Unable to generate quiz."
+        );
+
+    } finally {
+
+        button.disabled = false;
+
+
+        button.innerHTML = `
+
+            <i data-lucide="wand-sparkles"></i>
+
+            Generate AI Quiz
+
+        `;
+
+
+        if (typeof lucide !== "undefined") {
+            lucide.createIcons();
+        }
+
+    }
+
+}
+
+
+/* =========================================
+   NORMALIZE ANSWER
+========================================= */
+
+function normalizeAnswer(answer) {
+
+    return String(
+        answer ?? ""
+    )
+        .trim()
+        .replace(/\s+/g, " ")
+        .toLowerCase();
+
+}
+
+
+/* =========================================
+   NORMALIZE AI QUESTIONS
+========================================= */
+
+function normalizeQuestions(
+    questions
+) {
+
+    return questions
+        .map(q => {
+
+            const options =
+                Array.isArray(q.options)
+                    ? q.options.map(
+                        option =>
+                            String(
+                                option
+                            ).trim()
+                    )
+                    : [];
+
+
+            let correctAnswer =
+                q.correct_answer ??
+                q.correctAnswer ??
+                q.answer;
+
+
+            /* =================================
+               NUMBER ANSWER
+               Example: 2
+            ================================= */
+
+            if (
+                typeof correctAnswer ===
+                    "number" &&
+                options[
+                    correctAnswer
+                ] !== undefined
+            ) {
+
+                correctAnswer =
+                    options[
+                        correctAnswer
+                    ];
+
+            }
+
+
+            /* =================================
+               STRING NUMBER ANSWER
+               Example: "2"
+            ================================= */
+
+            if (
+                typeof correctAnswer ===
+                    "string" &&
+                /^\d+$/.test(
+                    correctAnswer.trim()
+                )
+            ) {
+
+                const index =
+                    Number(
+                        correctAnswer.trim()
+                    );
+
+
+                if (
+                    options[index] !==
+                    undefined
+                ) {
+
+                    correctAnswer =
+                        options[index];
+
+                }
+
+            }
+
+
+            /* =================================
+               LETTER ANSWER
+               Example: "A"
+            ================================= */
+
+            if (
+                typeof correctAnswer ===
+                    "string" &&
+                /^[A-D]$/i.test(
+                    correctAnswer.trim()
+                )
+            ) {
+
+                const index =
+                    correctAnswer
+                        .trim()
+                        .toUpperCase()
+                        .charCodeAt(0) - 65;
+
+
+                if (
+                    options[index] !==
+                    undefined
+                ) {
+
+                    correctAnswer =
+                        options[index];
+
+                }
+
+            }
+
+
+            return {
+
+                question:
+                    String(
+                        q.question ??
+                        q.text ??
+                        ""
+                    ).trim(),
+
+
+                options:
+                    options,
+
+
+                answer:
+                    String(
+                        correctAnswer ??
+                        ""
+                    ).trim(),
+
+
+                explanation:
+                    String(
+                        q.explanation ??
+                        ""
+                    ).trim()
+
+            };
+
+        })
+
+        .filter(q =>
+
+            q.question &&
+            q.options.length === 4 &&
+            q.answer
+
+        );
+
+}
+
+
+/* =========================================
+   RENDER QUESTION
+========================================= */
+
+function renderQuizQuestion() {
+
+    const quizArea =
+        document.getElementById(
+            "quizArea"
+        );
+
+
+    if (
+        !quizArea ||
+        !generatedQuiz.length
+    ) {
+
+        return;
+
+    }
+
+
+    const q =
+        generatedQuiz[
+            currentQuestion
+        ];
+
+
+    if (!q) {
+        return;
+    }
+
+
+    const selected =
+        selectedAnswers[
+            currentQuestion
+        ];
+
+
+    const isLast =
+        currentQuestion ===
+        generatedQuiz.length - 1;
+
+
+    quizArea.innerHTML = `
+
+        <div class="quiz-running">
+
+            <div class="quiz-top">
+
+                <div>
+
+                    <span class="quiz-progress-text">
+
+                        Question
+                        ${currentQuestion + 1}
+                        of
+                        ${generatedQuiz.length}
+
+                    </span>
+
+
+                    <h3
+                        class="quiz-question"
+                    >
+
+                        ${escapeHTML(
+                            q.question
+                        )}
+
+                    </h3>
+
+                </div>
+
+
+                ${
+                    quizSecondsLeft > 0
+                        ? `
+
+                            <div
+                                class="quiz-timer"
+                                id="quizTimer"
+                            >
+
+                                ${formatTime(
+                                    quizSecondsLeft
+                                )}
+
+                            </div>
+
+                          `
+                        : ""
+                }
+
+            </div>
+
+
+            <div class="options">
+
+                ${q.options.map(
+                    (option, index) => {
+
+                        const isSelected =
+                            selected === index;
+
+
+                        return `
+
+                            <button
+                                type="button"
+                                class="option ${
+                                    isSelected
+                                        ? "selected"
+                                        : ""
+                                }"
+                                onclick="selectQuizOption(${index})"
+                            >
+
+                                <span
+                                    class="option-letter"
+                                >
+                                    ${String.fromCharCode(
+                                        65 + index
+                                    )}
+                                </span>
+
+
+                                <span>
+                                    ${escapeHTML(
+                                        option
+                                    )}
+                                </span>
+
+                            </button>
+
+                        `;
+
+                    }
+                ).join("")}
+
+            </div>
+
+
+            <div class="quiz-actions">
+
+                <button
+                    type="button"
+                    class="quiz-nav-btn"
+                    onclick="previousQuestion()"
+                    ${
+                        currentQuestion === 0
+                            ? "disabled"
+                            : ""
+                    }
+                >
+                    Previous
+                </button>
+
+
+                ${
+                    isLast
+
+                        ? `
+
+                            <button
+                                type="button"
+                                class="quiz-nav-btn primary"
+                                onclick="finishQuiz(false)"
+                            >
+                                Submit Quiz
+                            </button>
+
+                          `
+
+                        : `
+
+                            <button
+                                type="button"
+                                class="quiz-nav-btn primary"
+                                onclick="nextQuestion()"
+                            >
+                                Next
+                            </button>
+
+                          `
+                }
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    if (
+        typeof lucide !== "undefined"
+    ) {
+
+        lucide.createIcons();
+
+    }
+
+
+    updateTimerDisplay();
+
+}
+
+
+/* =========================================
+   SELECT OPTION
+========================================= */
+
+function selectQuizOption(index) {
+
+    if (
+        !generatedQuiz[
+            currentQuestion
+        ]
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+       IMPORTANT:
+       We store OPTION INDEX,
+       not option text.
+    */
+
+    selectedAnswers[
+        currentQuestion
+    ] = index;
+
+
+    console.log(
+        `Question ${currentQuestion + 1} selected option:`,
+        index,
+        generatedQuiz[
+            currentQuestion
+        ].options[index]
+    );
+
+
+    renderQuizQuestion();
+
+}
+
+
+/* =========================================
+   NEXT QUESTION
+========================================= */
+
+function nextQuestion() {
+
+    if (
+        currentQuestion <
+        generatedQuiz.length - 1
+    ) {
+
+        currentQuestion++;
+
+        renderQuizQuestion();
+
+    }
+
+}
+
+
+/* =========================================
+   PREVIOUS QUESTION
+========================================= */
+
+function previousQuestion() {
+
+    if (
+        currentQuestion > 0
+    ) {
+
+        currentQuestion--;
+
+        renderQuizQuestion();
+
+    }
+
+}
+
+
+/* =========================================
+   TIMER
+========================================= */
+
+function startQuizTimer() {
+
+    clearInterval(
+        quizTimerInterval
+    );
+
+
+    quizTimerInterval =
+        setInterval(
+            () => {
+
+                quizSecondsLeft--;
+
+
+                updateTimerDisplay();
+
+
+                if (
+                    quizSecondsLeft <= 0
+                ) {
+
+                    clearInterval(
+                        quizTimerInterval
+                    );
+
+
+                    finishQuiz(true);
+
+                }
+
+            },
+            1000
+        );
+
+}
+
+
+/* =========================================
+   TIMER DISPLAY
+========================================= */
+
+function updateTimerDisplay() {
+
+    const timer =
+        document.getElementById(
+            "quizTimer"
+        );
+
+
+    if (!timer) {
+        return;
+    }
+
+
+    timer.textContent =
+        formatTime(
+            quizSecondsLeft
+        );
+
+}
+
+
+/* =========================================
+   FORMAT TIME
+========================================= */
+
+function formatTime(
+    seconds
+) {
+
+    const safeSeconds =
+        Math.max(
+            0,
+            Number(seconds) || 0
+        );
+
+
+    const minutes =
+        Math.floor(
+            safeSeconds / 60
+        );
+
+
+    const remainingSeconds =
+        safeSeconds % 60;
+
+
+    return `${String(
+        minutes
+    ).padStart(
+        2,
+        "0"
+    )}:${String(
+        remainingSeconds
+    ).padStart(
+        2,
+        "0"
+    )}`;
+
+}
+
+
+/* =========================================
+   FINISH QUIZ
+========================================= */
+
+async function finishQuiz(
+    timeUp = false
+) {
+
+    clearInterval(
+        quizTimerInterval
+    );
+
+
+    if (
+        !generatedQuiz.length
+    ) {
+
+        return;
+
+    }
+
+
+    let correct = 0;
+
+
+    console.log(
+        "================================"
+    );
+
+    console.log(
+        "QUIZ RESULT CHECK"
+    );
+
+    console.log(
+        "================================"
+    );
+
+
+    generatedQuiz.forEach(
+        (question, index) => {
+
+            const selectedIndex =
+                selectedAnswers[index];
+
+
+            let selectedAnswer =
+                null;
+
+
+            if (
+                selectedIndex !==
+                    null &&
+                selectedIndex !==
+                    undefined
+            ) {
+
+                selectedAnswer =
+                    question.options[
+                        selectedIndex
+                    ];
+
+            }
+
+
+            const correctAnswer =
+                question.answer;
+
+
+            const isCorrect =
+                selectedAnswer !== null &&
+                normalizeAnswer(
+                    selectedAnswer
+                ) ===
+                normalizeAnswer(
+                    correctAnswer
+                );
+
+
+            console.log(
+                `Q${index + 1}:`,
+                {
+                    selectedIndex:
+                        selectedIndex,
+
+                    selectedAnswer:
+                        selectedAnswer,
+
+                    correctAnswer:
+                        correctAnswer,
+
+                    isCorrect:
+                        isCorrect
+                }
+            );
+
+
+            if (isCorrect) {
+
+                correct++;
+
+            }
+
+        }
+    );
+
+
+    const total =
+        generatedQuiz.length;
+
+
+    const wrong =
+        total - correct;
+
+
+    const percentage =
+        total > 0
+            ? Math.round(
+                (correct / total) *
+                100
+            )
+            : 0;
+
+
+    console.log(
+        "================================"
+    );
+
+    console.log(
+        "FINAL RESULT"
+    );
+
+    console.log({
+
+        correct:
+            correct,
+
+        wrong:
+            wrong,
+
+        total:
+            total,
+
+        percentage:
+            percentage
+
+    });
+
+    console.log(
+        "================================"
+    );
+
+
+    /*
+       Show result first.
+    */
+
+    showQuizResult(
+        correct,
+        wrong,
+        total,
+        percentage,
+        timeUp
+    );
+
+
+    /*
+       Save correct result to Supabase.
+    */
+
+    await saveQuizResult(
+        correct,
+        total,
+        percentage
+    );
+
+}
+
+
+/* =========================================
+   SAVE RESULT TO SUPABASE
+========================================= */
+
+async function saveQuizResult(
+    correct,
+    total,
+    percentage
+) {
+
+    if (!currentUser) {
+
+        console.log(
+            "No logged-in user. Result not saved."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const subject =
+            document.getElementById(
+                "quizSubject"
+            )?.value || null;
+
+
+        const topic =
+            document.getElementById(
+                "quizTopic"
+            )?.value || null;
+
+
+        const {
+            error
+        } = await supabaseClient
+            .from("quiz_results")
+            .insert({
+
+                user_id:
+                    currentUser.id,
+
+                subject:
+                    subject,
+
+                topic:
+                    topic,
+
+                score:
+                    correct,
+
+                total_questions:
+                    total,
+
+                percentage:
+                    percentage,
+
+                quiz_title:
+                    "AI Quiz"
+
+            });
+
+
+        if (error) {
+
+            console.error(
+                "Could not save quiz result:",
+                error.message
+            );
+
+
+            return;
+
+        }
+
+
+        console.log(
+            "Quiz result saved successfully."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Result save error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   SHOW RESULT
+========================================= */
+
+function showQuizResult(
+    correct,
+    wrong,
+    total,
+    percentage,
+    timeUp = false
+) {
+
+    const quizArea =
+        document.getElementById(
+            "quizArea"
+        );
+
+
+    if (!quizArea) {
+        return;
+    }
+
+
+    quizArea.innerHTML = `
+
+        <div class="quiz-result">
+
+            <div class="result-circle">
+
+                ${percentage}%
+
+            </div>
+
+
+            <h2>
+                ${
+                    timeUp
+                        ? "Time's Up ⏰"
+                        : "Quiz Completed 🎉"
+                }
+            </h2>
+
+
+            <p>
+                Here is your performance summary.
+            </p>
+
+
+            <div class="result-stats">
+
+                <div class="result-stat">
+
+                    <strong>
+                        ${correct}
+                    </strong>
+
+                    <span>
+                        Correct
+                    </span>
+
+                </div>
+
+
+                <div class="result-stat">
+
+                    <strong>
+                        ${wrong}
+                    </strong>
+
+                    <span>
+                        Wrong
+                    </span>
+
+                </div>
+
+
+                <div class="result-stat">
+
+                    <strong>
+                        ${total}
+                    </strong>
+
+                    <span>
+                        Total Questions
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                style="
+                    display:flex;
+                    justify-content:center;
+                    gap:10px;
+                    margin-top:25px;
+                    flex-wrap:wrap;
+                "
+            >
+
+                <button
+                    class="quiz-nav-btn secondary"
+                    id="retryQuiz"
+                    type="button"
+                >
+                    Try Again
+                </button>
+
+
+                <button
+                    class="quiz-nav-btn primary"
+                    id="backDashboard"
+                    type="button"
+                >
+                    Dashboard
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    const retryButton =
+        document.getElementById(
+            "retryQuiz"
+        );
+
+
+    if (retryButton) {
+
+        retryButton.addEventListener(
+            "click",
+            () => {
+
+                clearInterval(
+                    quizTimerInterval
+                );
+
+
+                currentQuestion =
+                    0;
+
+
+                selectedAnswers =
+                    new Array(
+                        generatedQuiz.length
+                    ).fill(null);
+
+
+                const enableTimer =
+                    document.getElementById(
+                        "enableTimer"
+                    )?.checked;
+
+
+                const timeLimit =
+                    Number(
+                        document.getElementById(
+                            "quizTime"
+                        )?.value || 10
+                    );
+
+
+                if (enableTimer) {
+
+                    quizSecondsLeft =
+                        timeLimit * 60;
+
+                } else {
+
+                    quizSecondsLeft =
+                        0;
+
+                }
+
+
+                renderQuizQuestion();
+
+
+                if (enableTimer) {
+
+                    startQuizTimer();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    const dashboardButton =
+        document.getElementById(
+            "backDashboard"
+        );
+
+
+    if (dashboardButton) {
+
+        dashboardButton.addEventListener(
+            "click",
+            () => {
+
+                navigate(
+                    "dashboard"
+                );
+
+            }
+        );
+
+    }
+
+
+    if (
+        typeof lucide !== "undefined"
+    ) {
+
+        lucide.createIcons();
+
+    }
+
+}
+
+
+/* =========================================
+   QUIZ ERROR
+========================================= */
+
+function showQuizError(
+    message
+) {
+
+    const errorBox =
+        document.getElementById(
+            "quizError"
+        );
+
+
+    if (!errorBox) {
+        return;
+    }
+
+
+    errorBox.textContent =
+        message;
+
+
+    errorBox.style.display =
+        "block";
+
+}
+
+
+function hideQuizError() {
+
+    const errorBox =
+        document.getElementById(
+            "quizError"
+        );
+
+
+    if (!errorBox) {
+        return;
+    }
+
+
+    errorBox.textContent =
+        "";
+
+
+    errorBox.style.display =
+        "none";
+
+}
+
+</script>
+
+</body>
+</html>
