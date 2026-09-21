@@ -1558,6 +1558,925 @@
     border-radius: 10px;
 }
 
+/* =========================================================
+   QUIZONE — PREMIUM GLASS / HOVER VISUAL OVERRIDES
+   Only visual styling — no HTML / JS / layout functionality
+========================================================= */
+
+:root {
+    --primary: #4059AD;
+    --primary-dark: #31478F;
+    --primary-light: #EAF0FA;
+
+    --secondary: #6B9AC4;
+    --mint: #97D8C4;
+    --gold: #F4B942;
+
+    --bg: #F5F8FC;
+    --card: rgba(255, 255, 255, 0.72);
+
+    --text: #172033;
+    --muted: #6F778A;
+    --border: rgba(64, 89, 173, 0.12);
+
+    --success: #16A34A;
+    --danger: #EF4444;
+
+    --sidebar-width: 250px;
+
+    --glass-border: rgba(255, 255, 255, 0.72);
+    --glass-shadow: 0 12px 35px rgba(45, 65, 120, 0.08);
+    --hover-shadow: 0 18px 42px rgba(64, 89, 173, 0.14);
+
+    --transition: 0.28s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+body {
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(151, 216, 196, 0.14),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(107, 154, 196, 0.13),
+            transparent 30%
+        ),
+        var(--bg);
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar {
+    background: rgba(255, 255, 255, 0.76);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border-right: 1px solid var(--glass-border);
+
+    box-shadow:
+        8px 0 30px rgba(45, 65, 120, 0.035);
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.brand-logo {
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--secondary)
+        );
+
+    box-shadow:
+        0 8px 22px rgba(64, 89, 173, 0.24);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.brand-logo:hover {
+    transform: translateY(-2px) rotate(-2deg);
+
+    box-shadow:
+        0 13px 28px rgba(64, 89, 173, 0.30);
+}
+
+.brand-name span {
+    color: var(--primary);
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.nav-item {
+    position: relative;
+
+    transition:
+        background var(--transition),
+        color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.nav-item:hover {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(64, 89, 173, 0.08),
+            rgba(151, 216, 196, 0.10)
+        );
+
+    color: var(--primary);
+
+    transform: translateX(3px);
+}
+
+.nav-item.active {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(64, 89, 173, 0.12),
+            rgba(151, 216, 196, 0.14)
+        );
+
+    color: var(--primary);
+
+    box-shadow:
+        inset 3px 0 0 var(--primary);
+}
+
+.nav-item i {
+    transition: transform var(--transition);
+}
+
+.nav-item:hover i {
+    transform: scale(1.08);
+}
+
+
+/* =========================================================
+   PROFILE MINI
+========================================================= */
+
+.profile-mini {
+    background: rgba(255, 255, 255, 0.55);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        border-color var(--transition);
+}
+
+.profile-mini:hover {
+    transform: translateY(-2px);
+
+    border-color:
+        rgba(64, 89, 173, 0.20);
+
+    box-shadow:
+        0 10px 25px rgba(45, 65, 120, 0.07);
+}
+
+
+/* =========================================================
+   AVATARS
+========================================================= */
+
+.avatar,
+.large-avatar {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(64, 89, 173, 0.12),
+            rgba(151, 216, 196, 0.24)
+        );
+
+    color: var(--primary);
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+.logout-btn {
+    transition:
+        background var(--transition),
+        color var(--transition),
+        transform var(--transition);
+}
+
+.logout-btn:hover {
+    transform: translateX(3px);
+}
+
+
+/* =========================================================
+   MOBILE HEADER
+========================================================= */
+
+.mobile-header {
+    background: rgba(255, 255, 255, 0.80);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border-bottom: 1px solid var(--glass-border);
+}
+
+
+/* =========================================================
+   DATE BOX
+========================================================= */
+
+.date-box {
+    background: rgba(255, 255, 255, 0.68);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.date-box:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(45, 65, 120, 0.07);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+    background:
+        linear-gradient(
+            120deg,
+            #4059AD 0%,
+            #557DB7 48%,
+            #6B9AC4 100%
+        );
+
+    box-shadow:
+        0 18px 45px rgba(64, 89, 173, 0.20);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.hero:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 24px 55px rgba(64, 89, 173, 0.24);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+    height: 220px;
+
+    border-radius: 50%;
+
+    right: 120px;
+    bottom: -150px;
+
+    background:
+        rgba(151, 216, 196, 0.18);
+
+    filter: blur(2px);
+}
+
+.hero::after {
+    background:
+        rgba(255, 255, 255, 0.10);
+
+    box-shadow:
+        0 0 80px rgba(255, 255, 255, 0.08);
+}
+
+.hero-btn {
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.hero-btn:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 25px rgba(20, 35, 80, 0.20);
+}
+
+.hero-btn:active {
+    transform: scale(0.97);
+}
+
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.stat-card {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.86),
+            rgba(255, 255, 255, 0.62)
+        );
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    border: 1px solid var(--glass-border);
+
+    box-shadow:
+        var(--glass-shadow);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        border-color var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-6px);
+
+    border-color:
+        rgba(64, 89, 173, 0.20);
+
+    box-shadow:
+        var(--hover-shadow);
+}
+
+.stat-icon {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(64, 89, 173, 0.12),
+            rgba(151, 216, 196, 0.22)
+        );
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.stat-card:hover .stat-icon {
+    transform:
+        scale(1.10)
+        rotate(-3deg);
+
+    box-shadow:
+        0 7px 18px rgba(64, 89, 173, 0.12);
+}
+
+
+/* =========================================================
+   GENERAL CARDS
+========================================================= */
+
+.card,
+.feature-card,
+.coming-box,
+.profile-page-card,
+.quiz-builder-card,
+.quiz-running,
+.quiz-result {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.86),
+            rgba(255, 255, 255, 0.68)
+        );
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    border: 1px solid var(--glass-border);
+
+    box-shadow:
+        var(--glass-shadow);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        border-color var(--transition);
+}
+
+
+/* =========================================================
+   CARD HOVER
+========================================================= */
+
+.card:hover,
+.feature-card:hover,
+.coming-box:hover {
+    transform: translateY(-4px);
+
+    border-color:
+        rgba(64, 89, 173, 0.16);
+
+    box-shadow:
+        var(--hover-shadow);
+}
+
+
+/* =========================================================
+   CARD HEADERS
+========================================================= */
+
+.card-link {
+    transition:
+        color var(--transition),
+        transform var(--transition);
+}
+
+.card-link:hover {
+    color: var(--secondary);
+
+    transform: translateX(3px);
+}
+
+
+/* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
+.action-card {
+    background:
+        rgba(255, 255, 255, 0.56);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        border-color var(--transition),
+        background var(--transition);
+}
+
+.action-card:hover {
+    border-color:
+        rgba(64, 89, 173, 0.25);
+
+    transform: translateY(-6px);
+
+    background:
+        rgba(255, 255, 255, 0.82);
+
+    box-shadow:
+        0 15px 35px rgba(64, 89, 173, 0.12);
+}
+
+.action-icon {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(64, 89, 173, 0.12),
+            rgba(151, 216, 196, 0.22)
+        );
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.action-card:hover .action-icon {
+    transform:
+        scale(1.10)
+        rotate(-4deg);
+
+    box-shadow:
+        0 8px 18px rgba(64, 89, 173, 0.12);
+}
+
+
+/* =========================================================
+   ACTIVITY
+========================================================= */
+
+.activity-item {
+    transition:
+        background var(--transition),
+        padding-left var(--transition);
+}
+
+.activity-item:hover {
+    padding-left: 5px;
+}
+
+.activity-icon {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(64, 89, 173, 0.10),
+            rgba(151, 216, 196, 0.18)
+        );
+
+    transition:
+        transform var(--transition);
+}
+
+.activity-item:hover .activity-icon {
+    transform: scale(1.08);
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress-bar {
+    background:
+        rgba(64, 89, 173, 0.08);
+}
+
+.progress-fill {
+    background:
+        linear-gradient(
+            90deg,
+            var(--primary),
+            var(--secondary),
+            var(--mint)
+        );
+
+    box-shadow:
+        0 2px 8px rgba(64, 89, 173, 0.20);
+}
+
+
+/* =========================================================
+   FEATURE ICONS
+========================================================= */
+
+.feature-icon,
+.coming-icon,
+.builder-icon {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(64, 89, 173, 0.12),
+            rgba(151, 216, 196, 0.22)
+        );
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.feature-card:hover .feature-icon,
+.coming-box:hover .coming-icon {
+    transform:
+        scale(1.08)
+        rotate(-3deg);
+
+    box-shadow:
+        0 9px 22px rgba(64, 89, 173, 0.12);
+}
+
+
+/* =========================================================
+   PROFILE FIELDS
+========================================================= */
+
+.profile-field {
+    background:
+        rgba(255, 255, 255, 0.50);
+
+    transition:
+        transform var(--transition),
+        border-color var(--transition),
+        box-shadow var(--transition);
+}
+
+.profile-field:hover {
+    transform: translateY(-3px);
+
+    border-color:
+        rgba(64, 89, 173, 0.20);
+
+    box-shadow:
+        0 10px 25px rgba(45, 65, 120, 0.06);
+}
+
+
+/* =========================================================
+   FORM INPUTS
+========================================================= */
+
+.form-group input,
+.form-group select {
+    background:
+        rgba(255, 255, 255, 0.72);
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background var(--transition);
+}
+
+.form-group input:hover,
+.form-group select:hover {
+    border-color:
+        rgba(64, 89, 173, 0.25);
+
+    background:
+        rgba(255, 255, 255, 0.90);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color:
+        var(--primary);
+
+    background:
+        rgba(255, 255, 255, 0.95);
+
+    box-shadow:
+        0 0 0 4px rgba(64, 89, 173, 0.10),
+        0 8px 22px rgba(64, 89, 173, 0.08);
+}
+
+
+/* =========================================================
+   TIMER SWITCH
+========================================================= */
+
+.slider {
+    background:
+        #D7DDE8;
+
+    transition:
+        background var(--transition),
+        box-shadow var(--transition);
+}
+
+.switch input:checked + .slider {
+    background:
+        linear-gradient(
+            90deg,
+            var(--primary),
+            var(--secondary)
+        );
+
+    box-shadow:
+        0 4px 12px rgba(64, 89, 173, 0.20);
+}
+
+
+/* =========================================================
+   GENERATE BUTTON
+========================================================= */
+
+.generate-btn {
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--secondary)
+        );
+
+    box-shadow:
+        0 8px 20px rgba(64, 89, 173, 0.18);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        filter var(--transition);
+}
+
+.generate-btn:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #4059AD,
+            #5F91B8
+        );
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 14px 30px rgba(64, 89, 173, 0.25);
+
+    filter: brightness(1.03);
+}
+
+.generate-btn:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================================================
+   QUIZ TIMER
+========================================================= */
+
+.quiz-timer {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(64, 89, 173, 0.10),
+            rgba(151, 216, 196, 0.20)
+        );
+
+    box-shadow:
+        0 5px 15px rgba(64, 89, 173, 0.06);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.quiz-timer:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(64, 89, 173, 0.10);
+}
+
+
+/* =========================================================
+   QUIZ OPTIONS
+========================================================= */
+
+.option {
+    background:
+        rgba(255, 255, 255, 0.64);
+
+    transition:
+        transform var(--transition),
+        border-color var(--transition),
+        background var(--transition),
+        box-shadow var(--transition);
+}
+
+.option:hover {
+    border-color:
+        rgba(64, 89, 173, 0.35);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(64, 89, 173, 0.05),
+            rgba(151, 216, 196, 0.08)
+        );
+
+    transform: translateX(4px);
+
+    box-shadow:
+        0 7px 18px rgba(64, 89, 173, 0.08);
+}
+
+.option.selected {
+    border-color:
+        var(--primary);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(64, 89, 173, 0.10),
+            rgba(151, 216, 196, 0.16)
+        );
+
+    box-shadow:
+        0 8px 22px rgba(64, 89, 173, 0.10);
+}
+
+
+/* =========================================================
+   QUIZ NAV BUTTONS
+========================================================= */
+
+.quiz-nav-btn {
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        background var(--transition);
+}
+
+.quiz-nav-btn:not(:disabled):hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 18px rgba(45, 65, 120, 0.10);
+}
+
+.quiz-nav-btn:not(:disabled):active {
+    transform: scale(0.97);
+}
+
+.quiz-nav-btn.primary {
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--secondary)
+        );
+}
+
+.quiz-nav-btn.secondary:hover {
+    background:
+        rgba(64, 89, 173, 0.08);
+}
+
+
+/* =========================================================
+   RESULT CIRCLE
+========================================================= */
+
+.result-circle {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(64, 89, 173, 0.12),
+            rgba(151, 216, 196, 0.28)
+        );
+
+    box-shadow:
+        0 12px 30px rgba(64, 89, 173, 0.10);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.quiz-result:hover .result-circle {
+    transform: scale(1.05);
+
+    box-shadow:
+        0 16px 35px rgba(64, 89, 173, 0.14);
+}
+
+
+/* =========================================================
+   RESULT STATS
+========================================================= */
+
+.result-stat {
+    background:
+        rgba(255, 255, 255, 0.50);
+
+    transition:
+        transform var(--transition),
+        border-color var(--transition),
+        box-shadow var(--transition);
+}
+
+.result-stat:hover {
+    transform: translateY(-4px);
+
+    border-color:
+        rgba(64, 89, 173, 0.18);
+
+    box-shadow:
+        0 10px 25px rgba(45, 65, 120, 0.07);
+}
+
+
+/* =========================================================
+   SUCCESS / ACHIEVEMENT ACCENT
+   Yellow intentionally used only as a highlight
+========================================================= */
+
+.stat-change {
+    color: var(--success);
+}
+
+
+/* =========================================================
+   UNIVERSAL INTERACTION
+========================================================= */
+
+button,
+.action-card,
+.option,
+.card-link,
+.nav-item,
+.profile-mini,
+.profile-field {
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =========================================================
+   REDUCED MOTION ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+ 
+
     </style>
 </head>
 
