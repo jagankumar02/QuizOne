@@ -1785,22 +1785,71 @@ body {
    DATE BOX
 ========================================================= */
 
+/* =========================================
+   PREMIUM DATE BOX
+========================================= */
+
 .date-box {
-    background: rgba(255, 255, 255, 0.68);
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
 
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    padding: 10px 16px;
+    border-radius: 14px;
 
-    transition:
-        transform var(--transition),
-        box-shadow var(--transition);
-}
+    background: transparent;
 
-.date-box:hover {
-    transform: translateY(-2px);
+    border: 1px  transparent;
+
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
 
     box-shadow:
-        0 10px 25px rgba(45, 65, 120, 0.07);
+        0 8px 24px rgba(45, 65, 120, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+    color: #475467;
+    font-size: 13px;
+    font-weight: 600;
+
+    transition:
+        transform 0.3s cubic-bezier(.22, 1, .36, 1),
+        box-shadow 0.3s ease,
+        background 0.3s ease,
+        border-color 0.3s ease;
+}
+
+/* Calendar icon */
+.date-box i,
+.date-box svg {
+    width: 17px;
+    height: 17px;
+    color: #635bff;
+    transition: transform 0.3s ease;
+}
+
+/* Hover */
+.date-box:hover {
+    transform: translateY(-3px);
+
+    background: transparent;
+
+    border-color: transparent;
+
+    box-shadow:
+        0 14px 32px rgba(45, 65, 120, 0.12),
+        0 0 18px rgba(99, 91, 255, 0.07),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.date-box:hover i,
+.date-box:hover svg {
+    transform: scale(1.08);
+}
+
+/* Click effect */
+.date-box:active {
+    transform: translateY(-1px) scale(0.98);
 }
 
 
@@ -2768,6 +2817,7 @@ button,
 
     /* Important: keep AI inside normal page flow */
     position: static;
+
 }
 
 
@@ -3257,6 +3307,331 @@ button,
     }
 }
 
+body {
+    background:
+        linear-gradient(
+            rgba(247, 248, 252, 0.72),
+            rgba(247, 248, 252, 0.72)
+        ),
+        url(background.png) center center / cover fixed no-repeat;
+}
+
+
+/* Subtle glass effect on existing sections */
+
+.navbar,
+.feature,
+.cta {
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+
+/* Keep text clearly visible */
+
+.hero h1,
+.section-heading h2,
+.feature h3,
+.cta h2 {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* =========================================================
+   PREMIUM WELCOME ELLIPSE
+========================================================= */
+
+.welcome-ellipse {
+    position: relative;
+    width: 100%;
+    min-height: 105px;
+
+    padding: 22px 30px;
+
+    border-radius: 60px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.72),
+            rgba(255,255,255,.42)
+        );
+
+    border: 1px solid rgba(255,255,255,.85);
+
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+
+    box-shadow:
+        0 15px 40px rgba(15,23,42,.08),
+        inset 0 1px 0 rgba(255,255,255,.95);
+
+    overflow: hidden;
+
+    animation:
+        welcomeEnter
+        .8s
+        cubic-bezier(.22,1,.36,1)
+        both;
+
+    transition:
+        transform .35s ease,
+        box-shadow .35s ease;
+}
+
+
+/* Floating hover */
+
+.welcome-ellipse:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 20px 45px rgba(99,91,255,.12),
+        inset 0 1px 0 rgba(255,255,255,.95);
+}
+
+
+/* =========================================================
+   ENTRANCE ANIMATION
+========================================================= */
+
+@keyframes welcomeEnter {
+
+    0% {
+        opacity: 0;
+        transform:
+            translateY(-25px)
+            scale(.92);
+        filter: blur(6px);
+    }
+
+    60% {
+        opacity: 1;
+        transform:
+            translateY(4px)
+            scale(1.01);
+        filter: blur(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* =========================================================
+   GLOW
+========================================================= */
+
+.welcome-glow {
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(99,91,255,.16),
+            transparent 70%
+        );
+
+    right: -40px;
+    top: -70px;
+
+    pointer-events: none;
+
+    animation:
+        welcomeGlow
+        6s
+        ease-in-out
+        infinite;
+}
+
+@keyframes welcomeGlow {
+
+    0%, 100% {
+        transform: translate(0,0);
+        opacity: .7;
+    }
+
+    50% {
+        transform: translate(-25px,20px);
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.welcome-content {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   WELCOME ICON
+========================================================= */
+
+.welcome-icon {
+    width: 52px;
+    height: 52px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(99,91,255,.12),
+            rgba(37,99,235,.08)
+        );
+
+    border: 1px solid rgba(99,91,255,.12);
+
+    box-shadow:
+        0 8px 20px rgba(99,91,255,.10);
+
+    animation:
+        handFloat
+        3s
+        ease-in-out
+        infinite;
+
+    transition:
+        transform .3s ease;
+}
+
+.welcome-ellipse:hover .welcome-icon {
+    transform:
+        rotate(8deg)
+        scale(1.08);
+}
+
+@keyframes handFloat {
+
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+
+/* =========================================================
+   TEXT
+========================================================= */
+
+.welcome-content h1 {
+    margin: 0 0 5px;
+
+    font-size: 24px;
+    line-height: 1.2;
+
+    font-weight: 800;
+
+    letter-spacing: -.8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #111827,
+            #4f46e5
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+}
+
+.welcome-content p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .welcome-ellipse {
+        min-height: 95px;
+
+        padding: 18px 22px;
+
+        border-radius: 35px;
+    }
+
+    .welcome-icon {
+        width: 45px;
+        height: 45px;
+
+        font-size: 21px;
+    }
+
+    .welcome-content {
+        gap: 14px;
+    }
+
+    .welcome-content h1 {
+        font-size: 20px;
+    }
+
+    .welcome-content p {
+        font-size: 12px;
+    }
+}
+
+
+@media (max-width: 450px) {
+
+    .welcome-ellipse {
+        padding: 16px 18px;
+    }
+
+    .welcome-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 19px;
+    }
+
+    .welcome-content h1 {
+        font-size: 18px;
+    }
+}
+
+
     </style>
 </head>
 
@@ -3438,17 +3813,18 @@ button,
 
         <div class="topbar">
 
-            <div class="welcome">
+            <div class="welcome-ellipse">
+    <div class="welcome-glow"></div>
 
-                <h1 id="welcomeText">
-                    Welcome back 👋
-                </h1>
+    <div class="welcome-content">
+        <div class="welcome-icon">👋</div>
 
-                <p id="pageSubtitle">
-                    Continue your preparation and keep improving.
-                </p>
-
-            </div>
+        <div>
+            <h1>Welcome back, jagan</h1>
+            <p>Continue your preparation and keep improving.</p>
+        </div>
+    </div>
+</div>
 
 
             <div class="date-box">

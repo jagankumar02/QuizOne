@@ -415,6 +415,341 @@
 
         }
 
+        /* =====================================================
+   BACKGROUND IMAGE ONLY
+   Existing design ko change nahi karega
+===================================================== */
+
+body {
+    background:
+        linear-gradient(
+            rgba(247, 248, 252, 0.72),
+            rgba(247, 248, 252, 0.72)
+        ),
+        url(background.png) center center / cover fixed no-repeat;
+}
+
+
+/* Subtle glass effect on existing sections */
+
+.navbar,
+.feature,
+.cta {
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+
+/* Keep text clearly visible */
+
+.hero h1,
+.section-heading h2,
+.feature h3,
+.cta h2 {
+    position: relative;
+    z-index: 1;
+}
+
+/* =========================================================
+   GLASS TABS + PREMIUM HOVER EFFECTS
+========================================================= */
+
+/* Glass tab container */
+.tabs {
+    position: relative;
+    padding: 5px;
+
+    background: rgba(255, 255, 255, 0.28);
+
+    border: 1px solid rgba(255, 255, 255, 0.65);
+
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 10px 30px rgba(15, 23, 42, .08),
+        inset 0 1px 0 rgba(255,255,255,.8);
+
+    transition:
+        box-shadow .35s ease,
+        transform .35s ease;
+}
+
+/* Slight container hover */
+.tabs:hover {
+    box-shadow:
+        0 14px 35px rgba(79,70,229,.11),
+        inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+
+/* =========================================================
+   INDIVIDUAL TABS
+========================================================= */
+
+.tab {
+    position: relative;
+    overflow: hidden;
+
+    border: 1px solid transparent;
+
+    background: transparent;
+
+    color: #64748b;
+
+    transition:
+        all .3s cubic-bezier(.22,1,.36,1);
+}
+
+
+/* Glass shine inside tab */
+
+.tab::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.65),
+            rgba(255,255,255,.15)
+        );
+
+    opacity: 0;
+
+    transition: opacity .3s ease;
+
+    pointer-events: none;
+}
+
+
+/* Hover */
+
+.tab:hover {
+    color: #4f46e5;
+
+    transform: translateY(-2px);
+
+    background: rgba(255,255,255,.25);
+
+    border-color: rgba(255,255,255,.5);
+
+    box-shadow:
+        0 6px 18px rgba(79,70,229,.08);
+}
+
+.tab:hover::before {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   ACTIVE TAB — GLASS PILL
+========================================================= */
+
+.tab.active {
+    position: relative;
+
+    color: #4f46e5;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.88),
+            rgba(255,255,255,.58)
+        );
+
+    border: 1px solid rgba(255,255,255,.9);
+
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    box-shadow:
+        0 8px 20px rgba(79,70,229,.12),
+        inset 0 1px 0 rgba(255,255,255,.95);
+
+    transform: translateY(-1px);
+}
+
+
+/* Active tab glow */
+
+.tab.active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 25%;
+    right: 25%;
+    bottom: 4px;
+
+    height: 2px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #635bff,
+            #2563eb
+        );
+
+    box-shadow:
+        0 0 8px rgba(99,102,241,.45);
+
+    animation: tabGlow .35s ease both;
+}
+
+@keyframes tabGlow {
+
+    from {
+        opacity: 0;
+        transform: scaleX(.3);
+    }
+
+    to {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+}
+
+
+/* =========================================================
+   CLICK EFFECT
+========================================================= */
+
+.tab:active {
+    transform: scale(.96);
+}
+
+
+/* =========================================================
+   INPUT HOVER
+========================================================= */
+
+input:hover,
+select:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(99,102,241,.35);
+
+    box-shadow:
+        0 7px 18px rgba(99,102,241,.07);
+}
+
+
+/* =========================================================
+   INPUT FOCUS
+========================================================= */
+
+input:focus,
+select:focus {
+    transform: translateY(-2px) scale(1.005);
+
+    border-color: #6366f1;
+
+    box-shadow:
+        0 0 0 4px rgba(99,102,241,.10),
+        0 10px 25px rgba(99,102,241,.08);
+}
+
+
+/* =========================================================
+   BUTTON HOVER
+========================================================= */
+
+.save-btn {
+    position: relative;
+    overflow: hidden;
+
+    transition:
+        transform .3s cubic-bezier(.22,1,.36,1),
+        box-shadow .3s ease,
+        filter .3s ease;
+}
+
+.save-btn:hover {
+    transform: translateY(-4px) scale(1.01);
+
+    box-shadow:
+        0 16px 35px rgba(37,99,235,.28);
+
+    filter: brightness(1.05);
+}
+
+.save-btn:active {
+    transform: translateY(-1px) scale(.98);
+}
+
+
+/* =========================================================
+   LOGO HOVER
+========================================================= */
+
+.logo {
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+.logo:hover {
+    transform: translateY(-4px) rotate(-4deg) scale(1.05);
+
+    box-shadow:
+        0 12px 28px rgba(0,0,0,.18);
+}
+
+
+/* =========================================================
+   BENEFIT HOVER
+========================================================= */
+
+.benefit {
+    padding: 6px 8px;
+    margin-left: -8px;
+
+    border-radius: 12px;
+
+    transition:
+        background .3s ease,
+        transform .3s ease;
+}
+
+.benefit:hover {
+    background: rgba(255,255,255,.08);
+
+    transform: translateX(8px);
+}
+
+.benefit:hover .benefit-icon {
+    transform: scale(1.1) rotate(5deg);
+
+    background: rgba(255,255,255,.22);
+}
+
+
+/* =========================================================
+   LOGOUT HOVER
+========================================================= */
+
+.logout {
+    transition:
+        color .25s ease,
+        transform .25s ease;
+}
+
+.logout:hover {
+    color: #dc2626;
+
+    transform:
+        translateY(-2px)
+        scale(1.03);
+}
+
     </style>
 </head>
 
